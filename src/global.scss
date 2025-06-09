@@ -35,3 +35,21 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+/* ─── Fuente global ───────────────────────────── */
+body {
+  font-family: 'Bodoni Moda', serif;
+    --ion-background-color: #f9f6ff;
+  --ion-text-color: #222;
+}
+
+/* ─── Variables personalizadas ────────────────── */
+:root {
+  --ion-color-accent: #be8aff;
+  --ion-color-accent-rgb: 190, 138, 255;
+  --ion-color-accent-contrast: #ffffff;
+  --ion-color-accent-contrast-rgb: 255, 255, 255;
+  --ion-color-accent-shade: #a770dd;
+  --ion-color-accent-tint: #c89bff;
+}
+

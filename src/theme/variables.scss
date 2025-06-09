@@ -1,2 +1,26 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+// 1. Fuente personalizada
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700&display=swap');
+
+:root {
+  /* Colores base */
+  --ion-color-primary: #be8aff;
+  --ion-color-primary-rgb: 190, 138, 255;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #a170e0;
+  --ion-color-primary-tint: #c997ff;
+
+  /* Fondo y texto */
+  --ion-background-color: #f9f6ff;
+  --ion-text-color: #222;
+
+  /* Acentos */
+  --ion-color-accent: #be8aff;
+  --ion-color-accent-contrast: #fff;
+}
+
+body {
+  font-family: 'Bodoni Moda', serif;
+}

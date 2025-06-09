@@ -5,6 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
+import { PeliculaComponent } from '../components/pelicula/pelicula.component';
+
+// angular
+import { MatCardModule } from '@angular/material/card';
 
 
 @NgModule({
@@ -12,8 +16,10 @@ import { HomePageRoutingModule } from './home-routing.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule
+    HomePageRoutingModule,
+    MatCardModule
   ],
-  declarations: [HomePage]
+  declarations: [HomePage, PeliculaComponent],
+  exports: [HomePage, PeliculaComponent],
 })
 export class HomePageModule {}

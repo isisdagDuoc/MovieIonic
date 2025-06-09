@@ -1,0 +1,14 @@
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ movieInfo.title }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    {{ movieInfo.year }}
+        <div class="right">
+      <a (click)="irADetallePelicula()">
+        <ion-icon name="arrow-forward-outline" size="large"></ion-icon>
+      </a>
+    </div> 
+  </mat-card-content>
+</mat-card>
