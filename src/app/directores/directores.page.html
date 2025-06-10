@@ -1,0 +1,47 @@
+ <ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Directores</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+
+<ion-content [fullscreen]="true">
+  
+    <div class="right btn-navigate">
+    <a (click)="irAHome()">
+      Volver al Home
+    </a>
+  </div>
+  
+  <ion-list>
+    <ng-container *ngFor="let director of directores">
+      <ion-item>
+        <ion-avatar slot="start">
+          <img [src]="'assets' + director.image" alt="{{ director.name }}">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ director.name }}</h2>
+          <p>{{ director.birthYear }} - {{ director.nationality }}</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-list lines="none" class="pelis-list">
+        <ion-list-header>
+          <ion-label>
+            <span class="pelis-header">Películas de {{ director.name }}</span>
+          </ion-label>
+        </ion-list-header>
+        <ion-item *ngFor="let pelicula of getPeliculasDirector(director)">
+          <ion-thumbnail slot="start">
+            <img [src]="'assets' + pelicula.image" alt="{{ pelicula.title }}">
+          </ion-thumbnail>
+          <ion-label>
+            <span class="pelicula-titulo">{{ pelicula.title }}</span>
+            <p>{{ pelicula.year }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ng-container>
+  </ion-list>
+</ion-content>

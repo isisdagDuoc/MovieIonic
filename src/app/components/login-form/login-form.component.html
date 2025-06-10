@@ -1,0 +1,51 @@
+<ion-grid>
+  <ion-row>
+    <ion-col>
+      <ion-row>
+      <ul id="errCont" class="error-class ion-text-center ion-text-danger">        
+      </ul>    
+      </ion-row>  
+    </ion-col>
+  </ion-row> 
+  <ion-row>
+    <ion-col>
+      <ion-input 
+        id="nombreUsuario"
+        class="ion-padding"
+        placeholder="{{ data.username }}"
+        [(ngModel)]="data.username"
+
+         label="Nombre" label-placement="floating" fill="outline" placeholder="Ingresa tu nombre"
+      ></ion-input>      
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-input
+        id="correoUsuario"
+        class="ion-padding" 
+        placeholder="{{ data.email }}" 
+        [(ngModel)]="data.email"
+        label="Correo" label-placement="floating" fill="outline" placeholder="Ingresa tu correo"
+
+      ></ion-input>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-input
+        id="password"
+        type="password" 
+        class="ion-padding" 
+        placeholder="{{ data.password }}" 
+        [(ngModel)]="data.password"
+         label="Contraseña" label-placement="floating" fill="outline" placeholder="Ingresa tu ontraseña"
+      ></ion-input>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-text-center">
+    <ion-col>
+      <ion-button expand="full" (click)="doLogin()">Ingresar</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>

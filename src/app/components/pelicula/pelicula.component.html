@@ -1,0 +1,15 @@
+
+<mat-card #cardanimacion>
+  <img mat-card-image src="./assets/{{ movieInfo.image }}" alt="{{ movieInfo.title }}" class="movie-img">
+  <mat-card-header>
+    <mat-card-title>{{ movieInfo.title }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    {{ movieInfo.year }}
+    <p class="right">
+      <a (click)="irADetallePelicula()">
+       ver más
+      </a>
+    </p> 
+  </mat-card-content>
+</mat-card>

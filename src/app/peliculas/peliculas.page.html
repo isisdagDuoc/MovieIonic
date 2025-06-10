@@ -1,0 +1,46 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{ movieInfo.title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{ movieInfo.title }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+
+   <img mat-card-image src="./assets/{{ movieInfo.image }}" alt="{{ movieInfo.title }}" class="movie-img">
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="4">Nombre</ion-col>
+      <ion-col>{{ movieInfo.title }}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="4">Año</ion-col>
+      <ion-col>{{ movieInfo.year }}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="4">Puntuacion</ion-col>
+      <ion-col>{{ movieInfo.rating }}</ion-col>
+    </ion-row>    
+        <ion-row>
+      <ion-col size="4">Director</ion-col>
+      <ion-col>{{ movieInfo.director }}</ion-col>
+    </ion-row>    
+    <ion-row>
+      <ion-col size="4">Genero</ion-col>
+      <ion-col>{{ movieInfo.genre }}</ion-col>
+    </ion-row> 
+  </ion-grid>
+
+  <div class="right">
+      <a (click)="volverAlHome()">
+        <ion-icon name="arrow-back-outline" size="large"></ion-icon>
+      </a>
+    </div> 
+</ion-content>
+

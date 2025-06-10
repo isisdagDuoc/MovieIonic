@@ -1,0 +1,30 @@
+.comentario-card {
+  margin-bottom: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  background: #f9f6ff;
+  padding: 12px 8px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.avatar-img {
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border: 2px solid #e0e0e0;
+}
+
+ion-label h2 {
+  margin: 0 0 4px 0;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #222;
+}
+
+ion-label p {
+  margin: 0;
+  color: #444;
+  font-size: 0.98em;
+}
