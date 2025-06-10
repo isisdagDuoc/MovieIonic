@@ -53,7 +53,6 @@ export class PeliculaComponent  implements OnInit {
 
 
   irADetallePelicula() {
-    this.animation.play();
     this.router.navigate(['/peliculas/' + this.id], { state: this.state });
   }
 
