@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { userData } from 'src/assets/mocks/fakeData';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-directores',
@@ -9,10 +11,30 @@ import { userData } from 'src/assets/mocks/fakeData';
 })
 export class DirectoresPage implements OnInit {
 
-   directores: any[] = [];
+  directores: any[] = [];
+  allMovies: any[] = [];
+  state: any;
 
-  ngOnInit() {
-    this.directores = userData.directors || userData["directors"] || [];
+
+    constructor(private router: Router) {
+    if(this.router.getCurrentNavigation()?.extras.state)
+      this.state = this.router.getCurrentNavigation()?.extras.state;
+    else
+      this.router.navigate(["/login"]);
   }
 
+ngOnInit() {
+  this.directores = userData.directors || [];
+  this.allMovies = (userData.users || []).reduce((acc: any[], user: any) => {
+    return acc.concat(user.movies || []);
+  }, []);
+}
+
+  getPeliculasDirector(director: any) {
+    return this.allMovies.filter(movie => (director.movies || []).includes(movie.id));
+  }
+
+  irAHome() {
+    this.router.navigate(['/home']);
+  }
 }

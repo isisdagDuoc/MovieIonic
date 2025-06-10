@@ -64,13 +64,12 @@ export class LoginFormComponent  implements OnInit {
       let usuarioExiste = false;
 
       for(let i in userData.users) {
-        console.log(correoInput?.value, passwordInput?.value);
-        if(userData.users[i].email === correoInput?.value && userData.users[i].password === passwordInput?.value)
+        if(userData.users[i].email === correoInput?.value && userData.users[i].password === passwordInput?.value && userData.users[i].name === nombreInput?.value)
           usuarioExiste = true;
       }
 
       if(!usuarioExiste) {
-        this.showErr("No se encuentra un usuario con dicha contraseña.");
+        this.showErr("No se encuentra un usuario con dicha contraseña o nombre de usuario.");
         valid = false;
       }
     }    

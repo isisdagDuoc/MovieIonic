@@ -5,6 +5,11 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+      <div class="right btn-navigate">
+    <a (click)="irAHome()">
+      Volver al Home
+    </a>
+  </div>
   <ion-list>
     <ion-item *ngFor="let comentario of comentarios" class="comentario-card">
       <ion-avatar slot="start">

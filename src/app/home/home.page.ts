@@ -23,20 +23,24 @@ export class HomePage {
   }
 
   ngOnInit() {
-    console.log(this.state, '<<<');
     this.username = this.state['username'];
-
-    console.log(this.username, '<<<');
 
 
   for(let user of userData.users) {
-    console.log('Comparando:', user.name, this.username);
     if(user.name === this.username && user.movies) {
       this.peliculas = user.movies;
       break;
     }
   }
     console.log(this.peliculas);
+  }
+
+    irADirectores() {
+    this.router.navigate(['/directores']);
+  }
+
+  irAComentarios() {
+    this.router.navigate(['/comentarios']);
   }
 
 

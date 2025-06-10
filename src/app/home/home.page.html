@@ -1,21 +1,25 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Peliculas
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content [fullscreen]="true">
+  <ion-content [fullscreen]="true" class="ion-padding">
   <ion-header collapse="condense">
     <ion-toolbar>
-       <ion-title>
-      Peliculas de {{ username }}
-    </ion-title>
+      <ion-title size="large">Peliculas de {{ username }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
 <ion-content [fullscreen]="true">
+
+  <div class="right btn-navigate">
+    <a (click)="irADirectores()">
+     Directores
+    </a>
+  </div>
+
+  <div class="right btn-navigate">
+    <a (click)="irAComentarios()">
+      Comentarios
+    </a>
+  </div>
+
 
 <ion-list>
   <app-pelicula 

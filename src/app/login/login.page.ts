@@ -19,12 +19,4 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
-  irADirectores() {
-    this.router.navigate(['/directores']);
-  }
-
-  irAComentarios() {
-    this.router.navigate(['/comentarios']);
-  }
-
 }
