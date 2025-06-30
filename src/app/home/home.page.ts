@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { userData } from 'src/assets/mocks/fakeData';
+import { ApiserviceService } from '../apiservice.service';
 
 
 @Component({
@@ -15,11 +16,24 @@ export class HomePage {
   peliculas: Array<any> = [];
   state: any;
 
-  constructor(private router: Router) {
+  // 
+    user: any;
+    users: any;
+    posts: any;
+    post: any = {
+      id: null,
+      title: "",
+      body: "",
+      userId: null
+    };
+    compareWith: any;
+
+  constructor(
+    private api: ApiserviceService,
+    private router: Router
+  ) {
     if(this.router.getCurrentNavigation()?.extras.state)
       this.state = this.router.getCurrentNavigation()?.extras.state;
-    else
-      this.router.navigate(["/login"]);
   }
 
   ngOnInit() {
@@ -41,6 +55,15 @@ export class HomePage {
 
   irAComentarios() {
     this.router.navigate(['/comentarios']);
+  }
+
+  getPlaceHolders() {
+    this.api.getPlaceHolders().subscribe((data) => {
+      this.posts = data;
+      console.log("POST: ", this.posts);
+    }, (error) => {
+      console.error("Error fetching placeholders", error);
+    });
   }
 
 

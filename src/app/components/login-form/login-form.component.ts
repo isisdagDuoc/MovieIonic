@@ -18,7 +18,6 @@ export class LoginFormComponent  implements OnInit {
     password: '',
     email: ''
   }
-
     constructor(private router: Router) { }
 
     showErr(errMsg: String) {
