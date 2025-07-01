@@ -47,4 +47,18 @@ export class ApiserviceService {
   deletePlaceHolders(id: number): Observable<any> {
     return this.htpp.delete(this.apiURL+'/post/'+id, this.httpOptions)
   }
+
+  private weatherUrl = 'https://api.open-meteo.com/v1/forecast';
+
+  getWeather(lat: number, lon: number): Observable<any> {
+    const url = `${this.weatherUrl}?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&hourly=temperature_2m`;
+    return this.htpp.get(url);
+  }
+
+  getComentarios(): Observable<any> {
+    return this.htpp.get(this.apiURL+'/comments/').pipe(
+    retry(3),
+    );
+}
+
 }

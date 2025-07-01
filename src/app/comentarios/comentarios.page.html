@@ -1,24 +1,35 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Comentarios de Usuarios</ion-title>
+    <ion-title>Comentarios</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-      <div class="right btn-navigate">
-    <a (click)="irAHome()">
-      Volver al Home
-    </a>
+<ion-content class="ion-padding" [fullscreen]="true">
+  <div class="right btn-navigate">
+    <a (click)="irAHome()"> Volver al Home </a>
   </div>
+
   <ion-list>
-    <ion-item *ngFor="let comentario of comentarios" class="comentario-card">
+    <ion-item *ngFor="let comentario of comentariosPaginados">
       <ion-avatar slot="start">
-        <img src="../../assets/images//avatar1.png" alt="avatar">
+        <img src="../../assets/images/avatar1.png" alt="avatar" />
       </ion-avatar>
       <ion-label>
         <h2>{{ comentario.name }}</h2>
-        <p>{{ comentario.text }}</p>
+        <p><strong>{{ comentario.email }}</strong></p>
+        <p>{{ comentario.body }}</p>
       </ion-label>
     </ion-item>
   </ion-list>
+
+  <div class="ion-text-center">
+    <ion-button (click)="prevPage()" [disabled]="currentPage === 1"
+      >Anterior</ion-button
+    >
+    <ion-button
+      (click)="nextPage()"
+      [disabled]="(currentPage * itemsPerPage) >= allComentarios.length"
+      >Siguiente</ion-button
+    >
+  </div>
 </ion-content>

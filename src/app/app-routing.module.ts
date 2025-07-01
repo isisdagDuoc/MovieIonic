@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuardService } from './auth-guard.service';
 
 const routes: Routes = [
   {
@@ -13,7 +14,8 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
+    loadChildren: () => import('./home/home.module').then(m => m.HomePageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'peliculas',
@@ -29,12 +31,17 @@ const routes: Routes = [
   },
   {
     path: 'agregar',
-    loadChildren: () => import('./pages/agregar/agregar.module').then(m => m.AgregarPageModule)
+    loadChildren: () => import('./agregar/agregar.module').then(m => m.AgregarPageModule)
   },
   {
-    path: 'modificar',
-    loadChildren: () => import('./pages/modificar/modificar.module').then(m => m.ModificarPageModule)
+    path: 'notfound',
+    loadChildren: () => import('./notfound/notfound.module').then( m => m.NotfoundPageModule)
+  },
+  {
+    path: '**',
+    redirectTo: 'notfound'
   }
+
 ];
 
 @NgModule({

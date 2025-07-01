@@ -1,9 +1,15 @@
-<ion-header collapse="condense">
-  <ion-toolbar>
-    <ion-title size="large">MovieIonic</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <cs-login-form></cs-login-form>
+
+  <ion-header collapse="condense">
+    <ion-title size="large">MovieIonic</ion-title>
+  </ion-header>
+
+   <cs-login-form></cs-login-form>
+
+      <div class="btn-navigate">
+    <a (click)="irARegistro()">
+     ¿No tienes cuenta? Regístrate
+    </a>
+  </div>
 </ion-content>
+

@@ -1,0 +1,101 @@
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Registrarse</ion-title>
+    </ion-toolbar>
+  </ion-header>
+<ion-grid>
+  <ion-row>
+    <ion-col>
+      <ion-row>
+        <ul id="errCont" class="error-class ion-text-center ion-text-danger error-class">
+        </ul>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col>
+      <ion-input 
+        id="nombreUsuario"
+        class="ion-padding"
+        placeholder="{{ data.username }}"
+        [(ngModel)]="data.username"
+        label="Nombre"
+        label-placement="floating"
+        fill="outline"
+        placeholder="Ingresa tu nombre"
+      ></ion-input>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col>
+      <ion-input
+        id="correoUsuario"
+        class="ion-padding"
+        placeholder="{{ data.email }}"
+        [(ngModel)]="data.email"
+        label="Correo"
+        label-placement="floating"
+        fill="outline"
+        placeholder="Ingresa tu correo"
+      ></ion-input>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col>
+      <ion-input
+        id="password"
+        type="password"
+        class="ion-padding"
+        placeholder="{{ data.password }}"
+        [(ngModel)]="data.password"
+        label="Contraseña"
+        label-placement="floating"
+        fill="outline"
+        placeholder="Ingresa tu contraseña"
+      ></ion-input>
+    </ion-col>
+  </ion-row>
+
+    <ion-row>
+    <ion-col>
+      <ion-input
+        id="confirmPassword"
+        type="password"
+        class="ion-padding"
+        placeholder="{{ data.confirmPassword }}"
+        [(ngModel)]="data.confirmPassword"
+        label="Contraseña"
+        label-placement="floating"
+        fill="outline"
+        placeholder="Repetir tu contraseña"
+      ></ion-input>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+  <ion-col>
+    <ion-select
+      label="Películas favoritas"
+      label-placement="floating"
+      multiple="true"
+      [(ngModel)]="data.movies"
+    >
+      <ion-select-option *ngFor="let pelicula of availableMovies" [value]="pelicula">
+        {{ pelicula.title }}
+      </ion-select-option>
+    </ion-select>
+  </ion-col>
+</ion-row>
+
+
+  <ion-row class="ion-text-center">
+    <ion-col>
+      <ion-button expand="full" (click)="doRegistro()">Registrarse</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content>
