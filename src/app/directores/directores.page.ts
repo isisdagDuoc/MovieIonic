@@ -19,8 +19,6 @@ export class DirectoresPage implements OnInit {
     constructor(private router: Router) {
     if(this.router.getCurrentNavigation()?.extras.state)
       this.state = this.router.getCurrentNavigation()?.extras.state;
-    else
-      this.router.navigate(["/login"]);
   }
 
 ngOnInit() {

@@ -1,32 +1,40 @@
-
-  <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-header collapse="condense">
+  <ion-header>
     <ion-toolbar>
       <ion-title size="large">Peliculas de {{ username }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
-<ion-content [fullscreen]="true">
-
+<ion-content [fullscreen]="true" class="ion-padding">
   <div class="right btn-navigate">
-    <a (click)="irADirectores()">
-     Directores
-    </a>
+    <a (click)="irADirectores()">Directores</a>
   </div>
 
   <div class="right btn-navigate">
-    <a (click)="irAComentarios()">
-      Comentarios
-    </a>
+    <a (click)="irAComentarios()">Comentarios</a>
   </div>
 
+  <ion-card *ngIf="currentWeather">
+    <ion-card-header>
+      <ion-card-title>Clima actual</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Temperatura: {{ currentWeather.temperature }}°C</p>
+      <p>Código climático: {{ currentWeather.code }}</p>
+    </ion-card-content>
+  </ion-card>
 
-<ion-list>
-  <app-pelicula 
-    *ngFor="let pelicula of peliculas" 
-    [id]="pelicula.id" 
-    [state]="state">
-  </app-pelicula>
-</ion-list>
+  <ion-list>
+    <app-pelicula
+      *ngFor="let pelicula of peliculas"
+      [id]="pelicula.id"
+      [state]="state"
+    >
+    </app-pelicula>
+  </ion-list>
 
+  <div *ngIf="peliculas?.length === 0" class="ion-text-center ion-padding">
+    <ion-text color="medium">
+      <h3>Aún no tienes películas asociadas</h3>
+    </ion-text>
+  </div>
 </ion-content>

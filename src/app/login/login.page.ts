@@ -19,4 +19,8 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
+  irARegistro() {
+    this.router.navigate(['/agregar']);
+  }
+
 }
