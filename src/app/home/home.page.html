@@ -26,17 +26,11 @@
   <ion-list>
     <app-pelicula
       *ngFor="let pelicula of peliculas"
-      [pelicula]="pelicula"
+      [id]="pelicula.id"
       [state]="state"
     >
     </app-pelicula>
   </ion-list>
-
-  <ion-row class="ion-text-center">
-    <ion-col>
-      <ion-button expand="full" (click)="irAPeliculas()">Ver todas mis películas</ion-button>
-    </ion-col>
-  </ion-row>
 
   <div *ngIf="peliculas?.length === 0" class="ion-text-center ion-padding">
     <ion-text color="medium">

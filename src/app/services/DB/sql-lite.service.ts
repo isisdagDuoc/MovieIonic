@@ -46,6 +46,15 @@ export class SQLiteService {
   async crearTabla() {
     if (this.database != null) {
       try {
+      
+        /*
+        await this.database.executeSql('DELETE FROM pelicula;', []);
+        await this.database.executeSql('DELETE FROM pelicula_catalogo;', []);
+        await this.database.executeSql('DELETE FROM usuario;', []);
+        await this.database.executeSql('DELETE FROM director;', []);
+        await this.database.executeSql('DELETE FROM comentario;', []);
+        */
+
         // ──────────────── CATALOGO DE PELICULAS ─────────────────
         await this.database.executeSql(
           `CREATE TABLE IF NOT EXISTS pelicula_catalogo (
@@ -59,6 +68,7 @@ export class SQLiteService {
           );`,
           []
         );
+
         await this.database.executeSql(
           `INSERT OR IGNORE INTO pelicula_catalogo (id, title, year, rating, genre, image, directorId) VALUES
             (1, 'Inception', 2010, 8.8, 'Ciencia Ficción', 'inception.jpg', 1),
@@ -68,10 +78,16 @@ export class SQLiteService {
             (5, 'Jurassic Park', 1993, 8.1, 'Aventura', 'jurassic.jpg', 4),
             (6, 'Goodfellas', 1990, 8.7, 'Crimen', 'goodfellas.jpg', 5),
             (7, 'Pulp Fiction', 1994, 8.9, 'Crimen', 'pulp.jpg', 6),
-            (8, 'The Wolf of Wall Street', 2013, 8.2, 'Comedia', 'wolf.jpg', 5)
+            (8, 'The Wolf of Wall Street', 2013, 8.2, 'Comedia', 'wolf.jpg', 5),
+            (9, 'The Shawshank Redemption', 1994, 9.3, 'Drama', 'shawshank.jpg', 5),
+            (10, 'The Godfather', 1972, 9.2, 'Crimen', 'godfather.jpg', 5),
+            (11, 'Schindlers List', 1993, 9.0, 'Drama', 'schindler.jpg', 4),
+            (12, 'The Dark Knight', 2008, 9.0, 'Acción', 'dark-knight.jpg', 1),
+            (13, 'Forrest Gump', 1994, 8.8, 'Drama', 'forrest-gump.jpg', 5)
           ;`,
           []
         );
+
         // ──────────────── USUARIOS ─────────────────
         await this.database.executeSql(
           `CREATE TABLE IF NOT EXISTS usuario (
@@ -109,7 +125,13 @@ export class SQLiteService {
         (3, 'Lilly Wachowski', 1967, 'American', 'lili.jpg'),
         (4, 'Steven Spielberg', 1946, 'American', 'spielberg.jpg'),
         (5, 'Martin Scorsese', 1942, 'American', 'martin-scorsese.jpg'),
-        (6, 'Quentin Tarantino', 1963, 'American', 'tarantino.jpg');`,
+        (6, 'Quentin Tarantino', 1963, 'American', 'tarantino.jpg'),
+        (7, 'Joe Wright', 1972, 'British', 'joe-wright.jpg'),
+        (8, 'Ridley Scott', 1937, 'British', 'ridley-scott.jpg'),
+        (9, 'Francis Ford Coppola', 1939, 'American', 'coppola.jpg'),
+        (10, 'Peter Jackson', 1961, 'New Zealander', 'peter-jackson.jpg'),
+        (11, 'James Cameron', 1954, 'Canadian', 'james-cameron.jpg')
+        ;`,
           []
         );
 
@@ -152,10 +174,11 @@ export class SQLiteService {
 
         this.dbLista.next(true);
       } catch (error) {
-        console.error('Error al crear o poblar tablas:', error);
+        console.error('Error al crear o poblar tablas:', JSON.stringify(error));
         this.dbLista.next(false);
       }
     } else {
+      console.error('Error al crear o poblar tablas: NEXT');
       this.dbLista.next(false);
     }
   }
@@ -181,27 +204,14 @@ export class SQLiteService {
 
       const userId = result.insertId;
 
-      // Agregar películas solo si existen
       if (usuario.peliculas && usuario.peliculas.length > 0) {
         for (const pelicula of usuario.peliculas) {
           await this.database.executeSql(
             `INSERT INTO pelicula (userId, catalogoId) VALUES (?, ?);`,
-            [userId, pelicula.id] 
+            [userId, pelicula.id]
           );
         }
       }
-
-      // Si quieres agregar comentarios asociados, puedes hacerlo aquí de forma similar
-      // if (usuario.comentarios && usuario.comentarios.length > 0) {
-      //   for (const comentario of usuario.comentarios) {
-      //     await this.database.executeSql(
-      //       `INSERT INTO comentario (userId, name, text) VALUES (?, ?, ?);`,
-      //       [userId, comentario.name, comentario.text]
-      //     );
-      //   }
-      // }
-
-      console.log('Usuario y sus películas agregados');
       return true;
     } catch (error) {
       console.error('Error al agregar usuario con películas:', error);
@@ -293,31 +303,18 @@ export class SQLiteService {
     }
   }
 
-  async obtenerTodasPeliculas(): Promise<Pelicula[]> {
+  async obtenerPeliculasCatalogo(): Promise<any[]> {
     if (!this.database) return [];
     try {
-      const res = await this.database.executeSql(`SELECT * FROM pelicula;`, []);
-      const peliculas: Pelicula[] = [];
-      for (let i = 0; i < res.rows.length; i++) {
-        peliculas.push(res.rows.item(i));
-      }
-      console.log('Películas obtenidas:', peliculas);
-      return peliculas;
-    } catch (error) {
-      console.error('Error al obtener todas las películas:', error);
-      return [];
-    }
-  }
-
-  async obtenerPeliculasCatalogo(): Promise<any []> {
-    if (!this.database) return [];
-    try {
-      const res = await this.database.executeSql(`SELECT * FROM pelicula_catalogo;`, []);
+      const res = await this.database.executeSql(
+        `SELECT * FROM pelicula_catalogo;`,
+        []
+      );
       const peliculas: PeliculaCatalogo[] = [];
       for (let i = 0; i < res.rows.length; i++) {
         peliculas.push(res.rows.item(i));
       }
-      
+
       return peliculas;
     } catch (error) {
       console.error('Error al obtener catálogo de películas:', error);
@@ -352,6 +349,63 @@ export class SQLiteService {
       return peliculas;
     } catch (error) {
       console.error('Error al obtener películas del usuario:', error);
+      return [];
+    }
+  }
+
+  async obtenerDirectores(): Promise<any[]> {
+    if (!this.database) return [];
+    try {
+      const res = await this.database.executeSql(`SELECT * FROM director;`, []);
+      const directores: Director[] = [];
+
+      for (let i = 0; i < res.rows.length; i++) {
+        directores.push(res.rows.item(i));
+      }
+
+      return directores;
+    } catch (error) {
+      console.error('Error al obtener directores', error);
+      return [];
+    }
+  }
+
+  async obtenerPeliculasDirector(
+    directorId: number
+  ): Promise<PeliculaCatalogo[]> {
+    if (!this.database) return [];
+    try {
+      const res = await this.database.executeSql(
+        `SELECT * FROM pelicula_catalogo WHERE directorId = ?;`,
+        [directorId]
+      );
+      const peliculas: PeliculaCatalogo[] = [];
+      for (let i = 0; i < res.rows.length; i++) {
+        peliculas.push(res.rows.item(i));
+      }
+      return peliculas;
+    } catch (error) {
+      console.error('Error al obtener películas del director', error);
+      return [];
+    }
+  }
+
+  async obtenerComentarios(): Promise<any[]> {
+    if (!this.database) return [];
+    try {
+      const res = await this.database.executeSql(
+        `SELECT * FROM comentario;`,
+        []
+      );
+      const comentarios: Comentario[] = [];
+
+      for (let i = 0; i < res.rows.length; i++) {
+        comentarios.push(res.rows.item(i));
+      }
+
+      return comentarios;
+    } catch (error) {
+      console.error('Error al obtener directores', error);
       return [];
     }
   }

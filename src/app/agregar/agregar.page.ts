@@ -34,10 +34,7 @@ export class AgregarPage implements OnInit {
 
     this.db.dbState().subscribe(async (res) => {
       if (res) {
-
-        await this.obtenerPeliculas();
-        await this.db.obtenerTodasPeliculas();
-        await this.db.obtenerTexto();
+        this.obtenerPeliculas();
       }
     });
   }
@@ -47,15 +44,12 @@ export class AgregarPage implements OnInit {
   }
 
   obtenerPeliculas() {
-    console.log('<<<<<<<<<<<<<<<<<<<<')
     this.db.dbState().subscribe(async (res) => {
       if (res) {
         try {
           this.availableMovies = await this.db.obtenerPeliculasCatalogo();
-          console.log('Peliculas obtenidas:', this.availableMovies);
         } catch (error) {
           this.showError('Obtención de películas fallida');
-          console.error('Error al obtener las películas:', error);
         }
       }
     });
@@ -63,19 +57,24 @@ export class AgregarPage implements OnInit {
 
   doRegistro() {
     const { username, email, password, confirmPassword, movies } = this.data;
+
     this.db.dbState().subscribe(async (res) => {
       if (res) {
+
         if (!username || !email || !password || !confirmPassword) {
           this.showError('Todos los campos son obligatorios.');
           return;
         }
+
         if (password !== confirmPassword) {
           this.showError('Las contraseñas no coinciden.');
           return;
         }
-        
+
         const usuarios = await this.db.obtenerUsuarios();
+
         const userExists = usuarios.some((u: any) => u.email === email);
+
         if (userExists) {
           this.showError('Ya existe un usuario con este correo.');
           return;
@@ -91,12 +90,14 @@ export class AgregarPage implements OnInit {
         };
 
         const registroExitoso = await this.db.agregarUsuario(nuevoUsuario);
+
         if (!registroExitoso) {
           this.showError('Ocurrió un error al registrar el usuario.');
           return;
         }
 
         const usuariosActualizados = await this.db.obtenerUsuarios();
+
         const usuarioCreado = usuariosActualizados.find((u: any) => u.email === email);
         if (!usuarioCreado) {
           this.showError('No se pudo encontrar el usuario recién creado.');
@@ -120,6 +121,8 @@ export class AgregarPage implements OnInit {
             peliculas: movies.map((p) => p.title),
           },
         };
+        console.log('se registro?', JSON.stringify(usuarioCreado));
+
         this.router.navigate(['/login'], navExtras);
       }
     });

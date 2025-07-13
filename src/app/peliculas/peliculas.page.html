@@ -6,14 +6,14 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <ion-list>
-    <ion-item *ngFor="let p of pelicula">
+    <ion-item>
       <ion-label>
-        <h2>{{ p.title }}</h2>
-        <p>Año: {{ p.year }}</p>
-        <p>Género: {{ p.genre }}</p>
-        <p>Puntaje: {{ p.rating }}</p>
+        <h2>{{ pelicula.title }}</h2>
+        <p>Año: {{ pelicula.year }}</p>
+        <p>Género: {{ pelicula.genre }}</p>
+        <p>Puntaje: {{ pelicula.rating }}</p>
       </ion-label>
-      <img [src]="getImageSrc(p.image)" alt="{{ p.title }}" class="movie-img">
+      <img [src]="getImageSrc(pelicula.image)" alt="{{ pelicula.title }}" class="movie-img">
     </ion-item>
   </ion-list>
   <div class="right">

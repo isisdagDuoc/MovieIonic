@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { userData } from 'src/assets/mocks/fakeData';
 import { Router } from '@angular/router';
 import { ApiserviceService } from '../services/apiservice.service';
+import { SQLiteService } from '../services/DB/sql-lite.service';
 
 @Component({
   selector: 'app-comentarios',
@@ -19,29 +20,30 @@ export class ComentariosPage implements OnInit {
   currentPage = 1;
   itemsPerPage = 5;
 
-  constructor(private router: Router, private api: ApiserviceService) {
+  constructor(
+    private router: Router,
+    private api: ApiserviceService,
+    private db: SQLiteService
+  ) {
     if (this.router.getCurrentNavigation()?.extras.state)
       this.state = this.router.getCurrentNavigation()?.extras.state;
   }
 
   ngOnInit() {
-    this.comentarios = userData.comments || userData['comments'] || [];
-
-    this.api.getComentarios().subscribe(
-      (data) => {
-        this.allComentarios = data;
-        this.paginateComentarios();
-      },
-      (error) => {
-        console.error('Error al obtener comentarios', error);
-      }
-    );
-
-    this.getPlaceHolders();
+    this.obtenerComentarios();
   }
 
   irAHome() {
     this.router.navigate(['/home']);
+  }
+
+  obtenerComentarios() {
+    this.db.dbState().subscribe(async (res) => {
+      if (res) {
+        this.allComentarios = await this.db.obtenerComentarios();
+        this.paginateComentarios();
+      }
+    });
   }
 
   getPlaceHolders() {

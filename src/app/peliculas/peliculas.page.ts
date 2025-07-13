@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SQLiteService } from '../services/DB/sql-lite.service';
 import { PeliculaCatalogo } from '../services/DB/models/pelicula-catalogo';
+import { get } from '@awesome-cordova-plugins/core/decorators/common';
 
 @Component({
   selector: 'app-peliculas',
@@ -11,33 +12,34 @@ import { PeliculaCatalogo } from '../services/DB/models/pelicula-catalogo';
 })
 export class PeliculasPage implements OnInit {
   peliculas: PeliculaCatalogo[] = [];
-  pelicula: any[] = [];
+  pelicula: any = {};
   state: any;
+  id: any;
 
-  constructor(private router: Router, private db: SQLiteService) {
+  constructor(
+    private router: Router,
+    private db: SQLiteService,
+    private route: ActivatedRoute
+  ) {
     if (!this.router.getCurrentNavigation()?.extras.state)
       this.router.navigate(['/login']);
     else this.state = this.router.getCurrentNavigation()?.extras.state;
+    this.id = this.route.snapshot.paramMap.get('id');
   }
 
   async ngOnInit() {
+    this.getPeliculas();
+  }
+
+  getPeliculas() {
     this.db.dbState().subscribe(async (res) => {
       if (res) {
-
-      console.log('1. Peliculas favoritas del usuario desde el state:', JSON.stringify(this.state));
-
-        if (
-          this.state &&
-          this.state.userId &&
-          this.state.peliculas &&
-          Array.isArray(this.state.peliculas) &&
-          this.state.peliculas.length > 0
-        ) {
-
-          console.log('2. Peliculas favoritas del usuario desde el state:', JSON.stringify(this.state));
-          this.pelicula = this.state.peliculas;
-          this.pelicula = await this.db.obtenerPeliculasDeUsuario(
+        if (this.state && this.state.userId) {
+          this.peliculas = await this.db.obtenerPeliculasDeUsuario(
             this.state.userId
+          );
+          this.pelicula = this.peliculas.find(
+            (p) => String(p.id) === String(this.id)
           );
         }
       }

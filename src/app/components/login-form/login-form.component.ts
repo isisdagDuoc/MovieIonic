@@ -82,6 +82,7 @@ export class LoginFormComponent implements OnInit {
             const existe = await this.db.existeUsuario(nombreInput?.value, passwordInput?.value);
             resolve(existe);
           } catch (error) {
+            console.error('Error al consultar la base de datos:', JSON.stringify(error));
             this.showErr('Error al consultar la base de datos.');
             resolve(false);
           }
@@ -101,7 +102,6 @@ export class LoginFormComponent implements OnInit {
     if (!inputsValidos) return;
 
     const nombreInput = document.getElementById('nombreUsuario') as HTMLInputElement;
-    const correoInput = document.getElementById('correoUsuario') as HTMLInputElement;
     const passwordInput = document.getElementById('password') as HTMLInputElement;
 
     this.db.dbState().subscribe(async (res) => {
@@ -129,7 +129,7 @@ export class LoginFormComponent implements OnInit {
           this.router.navigate(['/home'], navExtras);
         } catch (error) {
           this.showErr('Error al validar usuario en la base de datos.');
-          console.error(error);
+          console.error('Error al validar usuario en la base de datos.', JSON.stringify(error));
         }
       }
     });

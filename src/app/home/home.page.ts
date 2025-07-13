@@ -47,16 +47,13 @@ export class HomePage {
           if (usuario) {
             this.username = usuario.name;
             this.peliculas = await this.db.obtenerPeliculasDeUsuario(usuario.id);
-            console.log('Peliculas obtenidas para usuario:', this.peliculas);
+
+            console.log('Peliculas del usuario obtenidas:', this.peliculas);
           } else {
             this.peliculas = [];
             this.username = '';
             console.log('Usuario no encontrado en la base de datos');
           }
-        } else {
-          this.peliculas = [];
-          this.username = '';
-          console.log('No se recibió email o username en el state');
         }
         this.loadWeather();
       }
@@ -72,11 +69,7 @@ export class HomePage {
   }
 
   irAPeliculas() {
-    console.log('Navegando a /peliculas con state:', {
-      userId: this.state?.userId,
-      peliculas: this.peliculas,
-      state: this.state
-    });
+    console.log('Navegando a /peliculas con state resultados completos home page:', JSON.stringify(this.state));
     this.router.navigate(['/peliculas'], {
       state: {
         userId: this.state?.userId,
