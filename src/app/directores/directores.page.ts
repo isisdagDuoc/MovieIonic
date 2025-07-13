@@ -46,4 +46,10 @@ export class DirectoresPage implements OnInit {
   irAHome() {
     this.router.navigate(['/home']);
   }
+
+    getImageSrc(path: string) {
+    if (!path) return 'assets/images/default.jpg';
+    const clean = path.startsWith('/') ? path.substring(1) : path;
+    return `assets/images/${clean}`;
+  }
 }

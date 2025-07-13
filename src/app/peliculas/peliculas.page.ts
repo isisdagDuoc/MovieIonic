@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SQLiteService } from '../services/DB/sql-lite.service';
 import { PeliculaCatalogo } from '../services/DB/models/pelicula-catalogo';
-import { get } from '@awesome-cordova-plugins/core/decorators/common';
 
 @Component({
   selector: 'app-peliculas',
@@ -15,6 +14,7 @@ export class PeliculasPage implements OnInit {
   pelicula: any = {};
   state: any;
   id: any;
+  peliculasDirector: PeliculaCatalogo[] = [];
 
   constructor(
     private router: Router,
@@ -52,7 +52,7 @@ export class PeliculasPage implements OnInit {
     const cleanPath = imagePath.startsWith('/')
       ? imagePath.substring(1)
       : imagePath;
-    return `assets/${cleanPath}`;
+    return `assets/images/${cleanPath}`;
   }
 
   volverAlHome() {

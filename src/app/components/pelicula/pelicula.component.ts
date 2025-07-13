@@ -34,7 +34,6 @@ export class PeliculaComponent {
         this.peliculas = await this.db.obtenerPeliculasDeUsuario(
           this.state.userId
         );
-        console.log('[DEBUG-PELIS][PeliculaComponent][obtenerPeliculas] peliculas:', JSON.stringify(this.peliculas), 'buscando id:', this.id);
         for (let pelicula of this.peliculas) {
           if (pelicula.id === Number(this.id)) {
             this.movieInfo = pelicula;
@@ -52,6 +51,6 @@ export class PeliculaComponent {
   getImageSrc(path: string) {
     if (!path) return 'assets/images/default.jpg';
     const clean = path.startsWith('/') ? path.substring(1) : path;
-    return `assets/${clean}`;
+    return `assets/images/${clean}`;
   }
 }

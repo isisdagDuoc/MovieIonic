@@ -5,21 +5,25 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-list>
-    <ion-item>
-      <ion-label>
-        <h2>{{ pelicula.title }}</h2>
-        <p>Año: {{ pelicula.year }}</p>
-        <p>Género: {{ pelicula.genre }}</p>
-        <p>Puntaje: {{ pelicula.rating }}</p>
-      </ion-label>
-      <img [src]="getImageSrc(pelicula.image)" alt="{{ pelicula.title }}" class="movie-img">
-    </ion-item>
-  </ion-list>
+  <ion-card>
+    <img
+      [src]="getImageSrc(pelicula.image)"
+      alt="{{ pelicula.title }}"
+      class="movie-img"
+    />
+    <ion-card-header>
+      <ion-card-title>{{ pelicula.title }}</ion-card-title>
+      <ion-card-subtitle>Año: {{ pelicula.year }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>Género: {{ pelicula.genre }}</p>
+      <p>Puntaje: {{ pelicula.rating }}</p>
+    </ion-card-content>
+  </ion-card>
   <div class="right">
     <a (click)="volverAlHome()">
       <ion-icon name="arrow-back-outline" size="large"></ion-icon>
     </a>
   </div>
 </ion-content>
-

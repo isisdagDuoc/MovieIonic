@@ -48,7 +48,7 @@ export class HomePage {
             this.username = usuario.name;
             this.peliculas = await this.db.obtenerPeliculasDeUsuario(usuario.id);
 
-            console.log('Peliculas del usuario obtenidas:', this.peliculas);
+            console.log('Peliculas del usuario obtenidas:', JSON.stringify(this.peliculas));
           } else {
             this.peliculas = [];
             this.username = '';
