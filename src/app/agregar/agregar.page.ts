@@ -1,5 +1,9 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
+import { SQLiteService } from '../services/DB/sql-lite.service';
+import { Usuario } from '../services/DB/models/usuario';
+import { Pelicula } from '../services/DB/models/pelicula';
+import { PeliculaCatalogo } from '../services/DB/models/pelicula-catalogo';
 
 @Component({
   selector: 'app-agregar',
@@ -13,143 +17,111 @@ export class AgregarPage implements OnInit {
     email: '',
     password: '',
     confirmPassword: '',
-    movies: [] as any[],
+    movies: [] as Pelicula[],
   };
 
-  availableMovies = [
-    {
-      id: 1,
-      title: 'Inception',
-      year: 2010,
-      rating: 8.8,
-      director: 'Christopher Nolan',
-      directorId: 1,
-      genre: 'Ciencia Ficción',
-      image: '/images/inception.jpg',
-    },
-    {
-      id: 2,
-      title: 'The Matrix',
-      year: 1999,
-      rating: 8.7,
-      director: 'Lana Wachowski, Lilly Wachowski',
-      directorId: 2,
-      genre: 'Ciencia Ficción',
-      image: '/images/matrix.jpg',
-    },
-    {
-      id: 3,
-      title: 'Interstellar',
-      year: 2014,
-      rating: 8.6,
-      director: 'Christopher Nolan',
-      directorId: 1,
-      genre: 'Ciencia Ficción',
-      image: '/images/interstellar.jpg',
-    },
-    {
-      id: 4,
-      title: 'Orgullo y Prejuicio',
-      year: 2005,
-      rating: 8.6,
-      director: 'Joe Wright',
-      directorId: 5,
-      genre: 'Romance',
-      image: '/images/orgullo.jpg',
-    },
-    {
-      id: 5,
-      title: 'Jurassic Park',
-      year: 1993,
-      rating: 8.1,
-      director: 'Steven Spielberg',
-      directorId: 4,
-      genre: 'Aventura',
-      image: '/images/jurassic.jpg',
-    },
-    {
-      id: 6,
-      title: 'Goodfellas',
-      year: 1990,
-      rating: 8.7,
-      director: 'Martin Scorsese',
-      directorId: 5,
-      genre: 'Crimen',
-      image: '/images/goodfellas.jpg',
-    },
-    {
-      id: 7,
-      title: 'Pulp Fiction',
-      year: 1994,
-      rating: 8.9,
-      director: 'Quentin Tarantino',
-      directorId: 6,
-      genre: 'Crimen',
-      image: '/images/pulp.jpg',
-    },
-    {
-      id: 8,
-      title: 'The Wolf of Wall Street',
-      year: 2013,
-      rating: 8.2,
-      director: 'Martin Scorsese',
-      directorId: 5,
-      genre: 'Comedia',
-      image: '/images/wolf.jpg',
-    },
-  ];
+  availableMovies: PeliculaCatalogo[] = [];
+  texto: string = 'buenas';
+  mensaje: string = '';
 
-  constructor(private router: Router, private renderer: Renderer2) {}
+  constructor(
+    private router: Router,
+    private renderer: Renderer2,
+    private db: SQLiteService
+  ) {}
 
-  ngOnInit(): void {}
+  async ngOnInit() {
+
+    this.db.dbState().subscribe(async (res) => {
+      if (res) {
+
+        await this.obtenerPeliculas();
+        await this.db.obtenerTodasPeliculas();
+        await this.db.obtenerTexto();
+      }
+    });
+  }
 
   showError(message: string) {
-    const ul = document.getElementById('errCont');
-    if (ul) {
-      ul.innerHTML = '';
-      const li = this.renderer.createElement('li');
-      const text = this.renderer.createText(message);
-      this.renderer.appendChild(li, text);
-      this.renderer.appendChild(ul, li);
-    }
+    this.mensaje = message;
+  }
+
+  obtenerPeliculas() {
+    console.log('<<<<<<<<<<<<<<<<<<<<')
+    this.db.dbState().subscribe(async (res) => {
+      if (res) {
+        try {
+          this.availableMovies = await this.db.obtenerPeliculasCatalogo();
+          console.log('Peliculas obtenidas:', this.availableMovies);
+        } catch (error) {
+          this.showError('Obtención de películas fallida');
+          console.error('Error al obtener las películas:', error);
+        }
+      }
+    });
   }
 
   doRegistro() {
-    const { username, email, password, confirmPassword } = this.data;
+    const { username, email, password, confirmPassword, movies } = this.data;
+    this.db.dbState().subscribe(async (res) => {
+      if (res) {
+        if (!username || !email || !password || !confirmPassword) {
+          this.showError('Todos los campos son obligatorios.');
+          return;
+        }
+        if (password !== confirmPassword) {
+          this.showError('Las contraseñas no coinciden.');
+          return;
+        }
+        
+        const usuarios = await this.db.obtenerUsuarios();
+        const userExists = usuarios.some((u: any) => u.email === email);
+        if (userExists) {
+          this.showError('Ya existe un usuario con este correo.');
+          return;
+        }
 
-    if (!username || !email || !password || !confirmPassword) {
-      this.showError('Todos los campos son obligatorios.');
-      return;
-    }
+        const nuevoUsuario: Usuario = {
+          id: 0,
+          name: username,
+          email: email,
+          password: password,
+          peliculas: [],
+          comentarios: [],
+        };
 
-    if (password !== confirmPassword) {
-      this.showError('Las contraseñas no coinciden.');
-      return;
-    }
+        const registroExitoso = await this.db.agregarUsuario(nuevoUsuario);
+        if (!registroExitoso) {
+          this.showError('Ocurrió un error al registrar el usuario.');
+          return;
+        }
 
-    const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+        const usuariosActualizados = await this.db.obtenerUsuarios();
+        const usuarioCreado = usuariosActualizados.find((u: any) => u.email === email);
+        if (!usuarioCreado) {
+          this.showError('No se pudo encontrar el usuario recién creado.');
+          return;
+        }
 
-    const userExists = storedUsers.some((u: any) => u.email === email);
-    if (userExists) {
-      this.showError('Ya existe un usuario con este correo.');
-      return;
-    }
+        if (usuarioCreado && movies.length > 0) {
+          for (const pelicula of movies) {
+            await this.db.agregarPeliculaAlUsuario(usuarioCreado.id, pelicula.id);
+          }
+        }
 
-    storedUsers.push({ username, email, password, movies: this.data.movies });
+        localStorage.setItem('loggedUser', usuarioCreado.name);
+        localStorage.setItem('loggedPass', usuarioCreado.password);
 
-    localStorage.setItem('users', JSON.stringify(storedUsers));
-    localStorage.setItem('isLogin', 'true');
-
-    const ul = document.getElementById('errCont');
-    if (ul) ul.innerHTML = '';
-
-    let navExtras = {
-      state: {
-        username: this.data.username,
-        movies: this.data.movies,
-      },
-    };
-
-    this.router.navigate(['/login'], navExtras);
+        let navExtras = {
+          state: {
+            username: usuarioCreado.name,
+            email: usuarioCreado.email,
+            userId: usuarioCreado.id,
+            peliculas: movies.map((p) => p.title),
+          },
+        };
+        this.router.navigate(['/login'], navExtras);
+      }
+    });
   }
 }

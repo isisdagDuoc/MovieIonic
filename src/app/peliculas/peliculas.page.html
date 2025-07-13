@@ -1,46 +1,25 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>{{ movieInfo.title }}</ion-title>
+    <ion-title>Catálogo de Películas</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title size="large">{{ movieInfo.title }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-
-   <img mat-card-image src="./assets/{{ movieInfo.image }}" alt="{{ movieInfo.title }}" class="movie-img">
-
-  <ion-grid>
-    <ion-row>
-      <ion-col size="4">Nombre</ion-col>
-      <ion-col>{{ movieInfo.title }}</ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="4">Año</ion-col>
-      <ion-col>{{ movieInfo.year }}</ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="4">Puntuacion</ion-col>
-      <ion-col>{{ movieInfo.rating }}</ion-col>
-    </ion-row>    
-        <ion-row>
-      <ion-col size="4">Director</ion-col>
-      <ion-col>{{ movieInfo.director }}</ion-col>
-    </ion-row>    
-    <ion-row>
-      <ion-col size="4">Genero</ion-col>
-      <ion-col>{{ movieInfo.genre }}</ion-col>
-    </ion-row> 
-  </ion-grid>
-
+  <ion-list>
+    <ion-item *ngFor="let p of pelicula">
+      <ion-label>
+        <h2>{{ p.title }}</h2>
+        <p>Año: {{ p.year }}</p>
+        <p>Género: {{ p.genre }}</p>
+        <p>Puntaje: {{ p.rating }}</p>
+      </ion-label>
+      <img [src]="getImageSrc(p.image)" alt="{{ p.title }}" class="movie-img">
+    </ion-item>
+  </ion-list>
   <div class="right">
-      <a (click)="volverAlHome()">
-        <ion-icon name="arrow-back-outline" size="large"></ion-icon>
-      </a>
-    </div> 
+    <a (click)="volverAlHome()">
+      <ion-icon name="arrow-back-outline" size="large"></ion-icon>
+    </a>
+  </div>
 </ion-content>
 

@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { userData } from 'src/assets/mocks/fakeData';
-import { ApiserviceService } from '../apiservice.service';
+import { ApiserviceService } from '../services/apiservice.service';
 import { Geolocation } from '@capacitor/geolocation';
+import { SQLiteService } from '../services/DB/sql-lite.service';
 
 
 @Component({
@@ -29,26 +30,37 @@ export class HomePage {
   currentWeather: any = null;
 
 
-  constructor(private api: ApiserviceService, private router: Router) {
+  constructor(private api: ApiserviceService, private router: Router, private db: SQLiteService) {
     if (this.router.getCurrentNavigation()?.extras.state)
       this.state = this.router.getCurrentNavigation()?.extras.state;
   }
 
-  ngOnInit() {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const loggedUsername = localStorage.getItem('loggedUser');
+  async ngOnInit() {
+    this.db.dbState().subscribe(async (res) => {
+      if (res) {
 
-    this.username = loggedUsername || '';
+        if (this.state && this.state.email && this.state.username) {
 
-    for (let user of users) {
-      if (user.username === this.username && user.movies) {
-        this.peliculas = user.movies;
-        break;
+          const password = localStorage.getItem('loggedPass') || '';
+          const usuario = await this.db.obtenerUsuario(this.state.email, password);
+
+          if (usuario) {
+            this.username = usuario.name;
+            this.peliculas = await this.db.obtenerPeliculasDeUsuario(usuario.id);
+            console.log('Peliculas obtenidas para usuario:', this.peliculas);
+          } else {
+            this.peliculas = [];
+            this.username = '';
+            console.log('Usuario no encontrado en la base de datos');
+          }
+        } else {
+          this.peliculas = [];
+          this.username = '';
+          console.log('No se recibió email o username en el state');
+        }
+        this.loadWeather();
       }
-    }
-
-    console.log(this.peliculas);
-    this.loadWeather();
+    });
   }
 
   irADirectores() {
@@ -57,6 +69,21 @@ export class HomePage {
 
   irAComentarios() {
     this.router.navigate(['/comentarios']);
+  }
+
+  irAPeliculas() {
+    console.log('Navegando a /peliculas con state:', {
+      userId: this.state?.userId,
+      peliculas: this.peliculas,
+      state: this.state
+    });
+    this.router.navigate(['/peliculas'], {
+      state: {
+        userId: this.state?.userId,
+        peliculas: this.peliculas,
+        ...this.state
+      }
+    });
   }
 
   async loadWeather() {

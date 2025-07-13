@@ -1,6 +1,7 @@
-
 <mat-card #cardanimacion>
-  <img mat-card-image src="./assets/{{ movieInfo.image }}" alt="{{ movieInfo.title }}" class="movie-img">
+ 
+   <img [src]="getImageSrc(movieInfo.image)" alt="{{ movieInfo.title }}" class="movie-img" />
+
   <mat-card-header>
     <mat-card-title>{{ movieInfo.title }}</mat-card-title>
   </mat-card-header>

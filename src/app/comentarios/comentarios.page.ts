@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { userData } from 'src/assets/mocks/fakeData';
 import { Router } from '@angular/router';
-import { ApiserviceService } from '../apiservice.service';
+import { ApiserviceService } from '../services/apiservice.service';
 
 @Component({
   selector: 'app-comentarios',

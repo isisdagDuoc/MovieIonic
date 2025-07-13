@@ -1,48 +1,44 @@
-import { Component, OnInit, Input,  AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { userData } from '../../../assets/mocks/fakeData';
+import {
+  Component,
+  OnInit,
+  Input,
+  AfterViewInit,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { createAnimation } from '@ionic/angular';
 import { AnimationController } from '@ionic/angular/standalone';
-
-
 
 @Component({
   selector: 'app-pelicula',
   templateUrl: './pelicula.component.html',
   styleUrls: ['./pelicula.component.scss'],
-  standalone: false
+  standalone: false,
 })
-export class PeliculaComponent  implements OnInit {
+export class PeliculaComponent implements OnInit {
+  @Input() id: Number = -1;
+  @Input() state: any;
+  @Input() pelicula: any;
+  movieInfo: any = {};
 
-  @Input() id : Number = -1;
-  @Input() state : any;
-  movieInfo : any = {};  
+  constructor(
+    private router: Router,
+    private animationCtrl: AnimationController
+  ) {}
 
-  constructor(private router: Router, private animationCtrl: AnimationController) {}
-
- ngOnInit() {
-    console.log(this.state, '<<<');
-
-    for (let user of userData.users) {
-      if (user.movies) {
-        for (let movie of user.movies) {
-          if (movie.id === Number(this.id)) {
-            this.movieInfo = movie;
-            break;
-          }
-        }
-      }
-    }
+  ngOnInit() {
+    this.movieInfo = this.pelicula;
   }
 
-    private animation!: Animation;
+  private animation!: Animation;
 
   @ViewChild('cardanimacion', { static: true }) cardAnimacion!: ElementRef;
 
   ngAfterViewInit() {
     const animation = createAnimation()
       .addElement(this.cardAnimacion.nativeElement)
-       .duration(3000)
+      .duration(3000)
       .iterations(Infinity)
       .keyframes([
         { offset: 0, width: '80px' },
@@ -51,9 +47,14 @@ export class PeliculaComponent  implements OnInit {
       ]);
   }
 
+  getImageSrc(imagePath: string): string {
+    const cleanPath = imagePath.startsWith('/')
+      ? imagePath.substring(1)
+      : imagePath;
+    return `assets/${cleanPath}`;
+  }
 
   irADetallePelicula() {
     this.router.navigate(['/peliculas/' + this.id], { state: this.state });
   }
-
 }

@@ -1,45 +1,59 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { userData } from '../../assets/mocks/fakeData'
+import { Router } from '@angular/router';
+import { SQLiteService } from '../services/DB/sql-lite.service';
+import { PeliculaCatalogo } from '../services/DB/models/pelicula-catalogo';
 
 @Component({
   selector: 'app-peliculas',
   templateUrl: './peliculas.page.html',
   styleUrls: ['./peliculas.page.scss'],
-  standalone: false
+  standalone: false,
 })
 export class PeliculasPage implements OnInit {
-
-  movieInfo: any = {};
+  peliculas: PeliculaCatalogo[] = [];
+  pelicula: any[] = [];
   state: any;
 
-  
-  constructor(private route: ActivatedRoute, private router: Router) { 
-    if(!this.router.getCurrentNavigation()?.extras.state)
-      this.router.navigate(["/login"]);
-    else
-      this.state = this.router.getCurrentNavigation()?.extras.state;
+  constructor(private router: Router, private db: SQLiteService) {
+    if (!this.router.getCurrentNavigation()?.extras.state)
+      this.router.navigate(['/login']);
+    else this.state = this.router.getCurrentNavigation()?.extras.state;
   }
 
-    ngOnInit() {
-    console.log(this.state);
-    let id = this.route.snapshot.paramMap.get('id');
+  async ngOnInit() {
+    this.db.dbState().subscribe(async (res) => {
+      if (res) {
 
-    for (let user of userData.users) {
-      if (user.movies) {
-        for (let movie of user.movies) {
-          if (movie.id == Number(id)) {
-            this.movieInfo = movie;
-            break;
-          }
+      console.log('1. Peliculas favoritas del usuario desde el state:', JSON.stringify(this.state));
+
+        if (
+          this.state &&
+          this.state.userId &&
+          this.state.peliculas &&
+          Array.isArray(this.state.peliculas) &&
+          this.state.peliculas.length > 0
+        ) {
+
+          console.log('2. Peliculas favoritas del usuario desde el state:', JSON.stringify(this.state));
+          this.pelicula = this.state.peliculas;
+          this.pelicula = await this.db.obtenerPeliculasDeUsuario(
+            this.state.userId
+          );
         }
       }
-    }
+    });
   }
 
-    volverAlHome() {
-    this.router.navigate(['/home'], { state : this.state });
+  getImageSrc(imagePath: string): string {
+    if (!imagePath) return 'assets/images/default.jpg';
+
+    const cleanPath = imagePath.startsWith('/')
+      ? imagePath.substring(1)
+      : imagePath;
+    return `assets/${cleanPath}`;
   }
 
-
+  volverAlHome() {
+    this.router.navigate(['/home'], { state: this.state });
+  }
 }

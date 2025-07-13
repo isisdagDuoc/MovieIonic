@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { AgregarPageRoutingModule } from './agregar-routing.module';
 
 import { AgregarPage } from './agregar.page';
+import { SQLiteService } from '../services/DB/sql-lite.service';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { AgregarPage } from './agregar.page';
     IonicModule,
     AgregarPageRoutingModule
   ],
-  declarations: [AgregarPage]
+  declarations: [AgregarPage],
+  providers: [SQLiteService]
 })
 export class AgregarPageModule {}
