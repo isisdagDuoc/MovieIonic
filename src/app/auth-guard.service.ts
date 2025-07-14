@@ -28,7 +28,6 @@ export class AuthGuardService implements CanActivate {
 
     await this.ds.init();
     const usuarioExiste = await this.ds.obtenerUsuario(username, password);
-    console.log('[Guard] usuarioExiste:', usuarioExiste);
 
     if (!usuarioExiste) {
       console.warn('[AuthGuard] Usuario no encontrado en DB o Storage');
@@ -36,7 +35,6 @@ export class AuthGuardService implements CanActivate {
       return false;
     }
 
-    console.log('[AuthGuard] Usuario autenticado:', usuarioExiste.email);
     return true;
   }
 }
