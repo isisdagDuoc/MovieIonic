@@ -27,6 +27,7 @@ export class LoginPage implements OnInit {
   }
 
   irARegistro() {
+     console.log('Redirigiendo');
     this.router.navigate(['/agregar']);
   }
 

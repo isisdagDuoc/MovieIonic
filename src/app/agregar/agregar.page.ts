@@ -1,9 +1,9 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SQLiteService } from '../services/DB/sql-lite.service';
 import { Usuario } from '../services/DB/models/usuario';
 import { Pelicula } from '../services/DB/models/pelicula';
 import { PeliculaCatalogo } from '../services/DB/models/pelicula-catalogo';
+import { DataService } from 'src/app/services/dataservice.service';
 
 @Component({
   selector: 'app-agregar',
@@ -26,105 +26,104 @@ export class AgregarPage implements OnInit {
 
   constructor(
     private router: Router,
-    private renderer: Renderer2,
-    private db: SQLiteService
+    private ds: DataService
   ) {}
 
   async ngOnInit() {
+    await this.ds.init();
 
-    this.db.dbState().subscribe(async (res) => {
-      if (res) {
-        this.obtenerPeliculas();
-      }
-    });
+    if (this.ds.isReady()) {
+      this.availableMovies = await this.ds.obtenerPeliculasCatalogo();
+      console.log('Películas cargadas:', this.availableMovies);
+    } else {
+      console.warn('DB o Storage no está listo.');
+    }
   }
 
   showError(message: string) {
     this.mensaje = message;
   }
 
-  obtenerPeliculas() {
-    this.db.dbState().subscribe(async (res) => {
-      if (res) {
-        try {
-          this.availableMovies = await this.db.obtenerPeliculasCatalogo();
-        } catch (error) {
-          this.showError('Obtención de películas fallida');
-        }
-      }
-    });
+  async obtenerPeliculas() {
+    if (this.ds.isReady()) {
+      this.availableMovies = await this.ds.obtenerPeliculasCatalogo();
+      console.log('Películas cargadas:', this.availableMovies);
+    } else {
+      console.warn('DB o Storage no está listo.');
+    }
   }
 
-  doRegistro() {
+  async doRegistro() {
     const { username, email, password, confirmPassword, movies } = this.data;
 
-    this.db.dbState().subscribe(async (res) => {
-      if (res) {
+    if (!username || !email || !password || !confirmPassword) {
+      this.showError('Todos los campos son obligatorios.');
+      return;
+    }
 
-        if (!username || !email || !password || !confirmPassword) {
-          this.showError('Todos los campos son obligatorios.');
-          return;
-        }
+    if (password !== confirmPassword) {
+      this.showError('Las contraseñas no coinciden.');
+      return;
+    }
 
-        if (password !== confirmPassword) {
-          this.showError('Las contraseñas no coinciden.');
-          return;
-        }
+    const usuarios = await this.ds.obtenerUsuarios();
+    const userExists = usuarios.some((u: any) => u.email === email);
 
-        const usuarios = await this.db.obtenerUsuarios();
+    if (userExists) {
+      this.showError('Ya existe un usuario con este correo.');
+      return;
+    }
 
-        const userExists = usuarios.some((u: any) => u.email === email);
+    const peliculasCatalogo: PeliculaCatalogo[] = movies.map((p) => ({
+      id: p.id,
+      title: p.title,
+      year: p.year,
+      rating: p.rating,
+      genre: p.genre,
+      image: p.image,
+      directorId: p.director?.id || 0,
+    }));
 
-        if (userExists) {
-          this.showError('Ya existe un usuario con este correo.');
-          return;
-        }
+    const nuevoUsuario: Usuario = {
+      id: 0,
+      name: username,
+      email: email,
+      password: password,
+      peliculas: [],
+      comentarios: [],
+    };
 
-        const nuevoUsuario: Usuario = {
-          id: 0,
-          name: username,
-          email: email,
-          password: password,
-          peliculas: [],
-          comentarios: [],
-        };
+    const registroExitoso = await this.ds.agregarUsuario(nuevoUsuario);
 
-        const registroExitoso = await this.db.agregarUsuario(nuevoUsuario);
+    if (!registroExitoso) {
+      this.showError('Ocurrió un error al registrar el usuario.');
+      return;
+    }
 
-        if (!registroExitoso) {
-          this.showError('Ocurrió un error al registrar el usuario.');
-          return;
-        }
+    const usuarioCreado = await this.ds.obtenerUsuario(email, password);
 
-        const usuariosActualizados = await this.db.obtenerUsuarios();
+    if (!usuarioCreado) {
+      this.showError('No se pudo encontrar el usuario recién creado.');
+      return;
+    }
 
-        const usuarioCreado = usuariosActualizados.find((u: any) => u.email === email);
-        if (!usuarioCreado) {
-          this.showError('No se pudo encontrar el usuario recién creado.');
-          return;
-        }
+    if (usuarioCreado && movies.length > 0) {
+      await this.ds.agregarPeliculasAUsuario(usuarioCreado.id, peliculasCatalogo);
+    }
 
-        if (usuarioCreado && movies.length > 0) {
-          for (const pelicula of movies) {
-            await this.db.agregarPeliculaAlUsuario(usuarioCreado.id, pelicula.id);
-          }
-        }
+    localStorage.setItem('loggedUser', usuarioCreado.name);
+    localStorage.setItem('loggedPass', usuarioCreado.password);
 
-        localStorage.setItem('loggedUser', usuarioCreado.name);
-        localStorage.setItem('loggedPass', usuarioCreado.password);
+    let navExtras = {
+      state: {
+        username: usuarioCreado.name,
+        email: usuarioCreado.email,
+        userId: usuarioCreado.id,
+        peliculas: movies.map((p) => p.title),
+      },
+    };
+    console.log('se registro?', JSON.stringify(usuarioCreado));
 
-        let navExtras = {
-          state: {
-            username: usuarioCreado.name,
-            email: usuarioCreado.email,
-            userId: usuarioCreado.id,
-            peliculas: movies.map((p) => p.title),
-          },
-        };
-        console.log('se registro?', JSON.stringify(usuarioCreado));
-
-        this.router.navigate(['/login'], navExtras);
-      }
-    });
+    this.router.navigate(['/login'], navExtras);
   }
 }

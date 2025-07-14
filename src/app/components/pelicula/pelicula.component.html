@@ -1,12 +1,12 @@
 <mat-card #cardanimacion>
  
-   <img [src]="getImageSrc(movieInfo.image)" alt="{{ movieInfo.title }}" class="movie-img" />
+   <img [src]="getImageSrc(movieInfo?.image)" alt="{{ movieInfo?.title }}" class="movie-img" />
 
   <mat-card-header>
-    <mat-card-title>{{ movieInfo.title }}</mat-card-title>
+    <mat-card-title>{{ movieInfo?.title }}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    {{ movieInfo.year }}
+    {{ movieInfo?.year }}
     <p class="right">
       <a (click)="irADetallePelicula()">
        ver más

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SQLiteService } from '../services/DB/sql-lite.service';
+import { DataService } from '../services/dataservice.service';
 
 @Component({
   selector: 'app-directores',
@@ -13,30 +13,31 @@ export class DirectoresPage implements OnInit {
   allMovies: any[] = [];
   state: any;
 
-  constructor(private router: Router, private db: SQLiteService) {
+  constructor(private router: Router, private ds: DataService) {
     if (this.router.getCurrentNavigation()?.extras.state)
       this.state = this.router.getCurrentNavigation()?.extras.state;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.ds.init();
     this.obtenerDirectores();
     this.obtenerPeliculasCatalogo();
   }
 
-  obtenerDirectores() {
-    this.db.dbState().subscribe(async (res) => {
-      if (res) {
-        this.directores = await this.db.obtenerDirectores();
-      }
-    });
+  async obtenerDirectores() {
+    try {
+      this.directores = await this.ds.obtenerDirectores();
+    } catch (error) {
+      console.error('[DirectoresPage] Error al obtener directores:', error);
+    }
   }
 
-  obtenerPeliculasCatalogo() {
-    this.db.dbState().subscribe(async (res) => {
-      if (res) {
-        this.allMovies = await this.db.obtenerPeliculasCatalogo();
-      }
-    });
+  async obtenerPeliculasCatalogo() {
+    try {
+      this.allMovies = await this.ds.obtenerPeliculasCatalogo();
+    } catch (error) {
+      console.error('Error al obtener películas:', error);
+    }
   }
 
   getPeliculasDirector(director: any) {
@@ -44,10 +45,10 @@ export class DirectoresPage implements OnInit {
   }
 
   irAHome() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/home'], { state: this.state });
   }
 
-    getImageSrc(path: string) {
+  getImageSrc(path: string) {
     if (!path) return 'assets/images/default.jpg';
     const clean = path.startsWith('/') ? path.substring(1) : path;
     return `assets/images/${clean}`;

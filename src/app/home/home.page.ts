@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { userData } from 'src/assets/mocks/fakeData';
 import { ApiserviceService } from '../services/apiservice.service';
 import { Geolocation } from '@capacitor/geolocation';
-import { Permissions } from '@capacitor/permissions';
-import { SQLiteService } from '../services/DB/sql-lite.service';
+
+import { DataService } from '../services/dataservice.service'; // 👈 usa DataService
 
 @Component({
   selector: 'app-home',
@@ -17,56 +16,49 @@ export class HomePage {
   peliculas: Array<any> = [];
   state: any;
 
-  user: any;
-  users: any;
-  posts: any;
-  post: any = {
-    id: null,
-    title: '',
-    body: '',
-    userId: null,
-  };
-  compareWith: any;
   currentWeather: any = null;
 
   constructor(
     private api: ApiserviceService,
     private router: Router,
-    private db: SQLiteService
+    private ds: DataService
   ) {
     if (this.router.getCurrentNavigation()?.extras.state)
       this.state = this.router.getCurrentNavigation()?.extras.state;
   }
 
   async ngOnInit() {
-    this.db.dbState().subscribe(async (res) => {
-      if (res) {
-        if (this.state && this.state.email && this.state.username) {
-          const password = localStorage.getItem('loggedPass') || '';
-          const usuario = await this.db.obtenerUsuario(
-            this.state.email,
-            password
-          );
+    await this.ds.init();
 
-          if (usuario) {
-            this.username = usuario.name;
-            this.peliculas = await this.db.obtenerPeliculasDeUsuario(
-              usuario.id
-            );
+    if (this.state && this.state.email && this.state.username) {
+      const password = localStorage.getItem('loggedPass') || '';
 
-            console.log(
-              'Peliculas del usuario obtenidas:',
-              JSON.stringify(this.peliculas)
-            );
-          } else {
-            this.peliculas = [];
-            this.username = '';
-            console.log('Usuario no encontrado en la base de datos');
-          }
+      const usuario = await this.ds.obtenerUsuario(this.state.email, password);
+
+      if (usuario) {
+        this.username = usuario.name;
+
+        const peliculas: any[] = await this.ds.obtenerPeliculasDeUsuario(usuario?.id) || [];
+
+        if (peliculas.length > 0) {
+          this.peliculas = peliculas;
         }
-        this.loadWeather();
+
+        if (usuario.peliculas && usuario.peliculas.length > 0) {
+          this.peliculas = usuario.peliculas;
+        }
+
+        console.log(
+          'Películas del usuario obtenidas:',
+          JSON.stringify(this.peliculas)
+        );
+      } else {
+        this.peliculas = [];
+        this.username = '';
       }
-    });
+    }
+
+    this.loadWeather();
   }
 
   irADirectores() {
@@ -78,10 +70,6 @@ export class HomePage {
   }
 
   irAPeliculas() {
-    console.log(
-      'Navegando a /peliculas con state resultados completos home page:',
-      JSON.stringify(this.state)
-    );
     this.router.navigate(['/peliculas'], {
       state: {
         userId: this.state?.userId,
@@ -91,22 +79,13 @@ export class HomePage {
     });
   }
 
-  async solicitarPermisosGeolocalizacion() {
-    const permiso = await Permissions.query({ name: 'geolocation' });
-
-    if (permiso.state !== 'granted') {
-      const resultado = await Permissions.request({ name: 'geolocation' });
-
-      if (resultado.state !== 'granted') {
-        throw new Error('Permiso de geolocalización denegado');
-      }
-    }
-  }
-
   async loadWeather() {
     try {
+      const permResult = await Geolocation.requestPermissions();
 
-      await this.solicitarPermisosGeolocalizacion();
+      if (permResult.location !== 'granted') {
+        throw new Error('Permiso de geolocalización denegado');
+      }
 
       const coords = await Geolocation.getCurrentPosition();
       const lat = coords.coords.latitude;

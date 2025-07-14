@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SQLiteService } from 'src/app/services/DB/sql-lite.service';
+import { DataService } from 'src/app/services/dataservice.service';
+import { PeliculaCatalogo } from '../../services/DB/models/pelicula-catalogo';
 
 @Component({
   selector: 'app-pelicula',
@@ -8,47 +9,52 @@ import { SQLiteService } from 'src/app/services/DB/sql-lite.service';
   styleUrls: ['./pelicula.component.scss'],
   standalone: false,
 })
-export class PeliculaComponent {
-  @Input() id: any;
-  @Input() state: any;
-  @Input() peliculas: any;
-  @Input() set pelicula(value: any) {
-    this.movieInfo = value;
+export class PeliculaComponent implements OnInit {
+  @Input() set pelicula(value: PeliculaCatalogo | null) {
+    if (value) {
+      this.movieInfo = value;
+      this.peliculaRecibidaDirecta = true;
+    }
   }
-  movieInfo: any = {};
-  peliculasArray = [];
-  peliculaSeleccionada: any;
 
-  constructor(private router: Router, private db: SQLiteService) {
-    if (this.router.getCurrentNavigation()?.extras.state)
-      this.state = this.router.getCurrentNavigation()?.extras.state;
-  }
+  @Input() id?: number;
+
+  @Input() state: any;
+
+  movieInfo: PeliculaCatalogo | null = null;
+  private peliculaRecibidaDirecta = false;
+
+  constructor(private router: Router, private ds: DataService) {}
 
   async ngOnInit() {
-    this.obtenerPeliculas();
-  }
+    await this.ds.init();
 
-  obtenerPeliculas(){
-    this.db.dbState().subscribe(async (res) => {
-      if (res) {
-        this.peliculas = await this.db.obtenerPeliculasDeUsuario(
-          this.state.userId
-        );
-        for (let pelicula of this.peliculas) {
-          if (pelicula.id === Number(this.id)) {
-            this.movieInfo = pelicula;
-            break;
-          }
-        }
-      }
-    })
+    if (this.peliculaRecibidaDirecta && this.movieInfo) {
+      return;
+    }
+
+    if (this.id != null) {
+      const catalogo = await this.ds.obtenerPeliculasCatalogo();
+      this.movieInfo = catalogo.find((p) => p.id === this.id) || null;
+    }
+
+    if (!this.movieInfo) {
+      console.warn('[PeliculaComponent] No se pudo obtener la película.');
+    }
   }
 
   irADetallePelicula() {
-    this.router.navigate(['/peliculas/' + this.id], { state: this.state });
+    if (!this.movieInfo) return;
+
+    this.router.navigate(['/peliculas/' + this.movieInfo.id], {
+      state: {
+        ...this.state,
+        pelicula: this.movieInfo,
+      },
+    });
   }
 
-  getImageSrc(path: string) {
+  getImageSrc(path: string | undefined) {
     if (!path) return 'assets/images/default.jpg';
     const clean = path.startsWith('/') ? path.substring(1) : path;
     return `assets/images/${clean}`;

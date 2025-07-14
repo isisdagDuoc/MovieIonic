@@ -270,8 +270,8 @@ export class SQLiteService {
           name: item.name,
           email: item.email,
           password: item.password,
-          peliculas: [], // Siempre array
-          comentarios: [], // Siempre array
+          peliculas: [],
+          comentarios: [],
         };
         return usuario;
       }

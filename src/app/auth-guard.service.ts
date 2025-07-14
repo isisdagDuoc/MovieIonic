@@ -1,27 +1,42 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
-import { SQLiteService } from './services/DB/sql-lite.service';
+import { DataService } from './services/dataservice.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthGuardService implements CanActivate {
-  constructor(private router: Router, private db: SQLiteService) {}
+  constructor(private router: Router, private ds: DataService) {}
 
   async canActivate(route: ActivatedRouteSnapshot): Promise<boolean> {
-    // Profe, aca utilice localestorage ya que no hay una forma tan directa de asociar la db con el authguard
+    console.log(
+      'LocalStorage:',
+      localStorage.getItem('loggedUser'),
+      localStorage.getItem('loggedPass')
+    );
+
     const username = localStorage.getItem('loggedUser');
     const password = localStorage.getItem('loggedPass');
+
     if (!username || !password) {
+      console.warn(
+        '[AuthGuard] Usuario o contraseña no encontrados en LocalStorage'
+      );
       this.router.navigate(['/login']);
       return false;
     }
-    // Validar en la base de datos
-    const usuarioExiste = await this.db.existeUsuario(username, password);
+
+    await this.ds.init();
+    const usuarioExiste = await this.ds.obtenerUsuario(username, password);
+    console.log('[Guard] usuarioExiste:', usuarioExiste);
+
     if (!usuarioExiste) {
+      console.warn('[AuthGuard] Usuario no encontrado en DB o Storage');
       this.router.navigate(['/login']);
       return false;
     }
+
+    console.log('[AuthGuard] Usuario autenticado:', usuarioExiste.email);
     return true;
   }
 }
