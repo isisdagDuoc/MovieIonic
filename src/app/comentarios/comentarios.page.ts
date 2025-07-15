@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { userData } from 'src/assets/mocks/fakeData';
 import { Router } from '@angular/router';
-import { ApiserviceService } from '../apiservice.service';
+import { ApiserviceService } from '../services/apiservice.service';
+import { DataService } from '../services/dataservice.service';
 
 @Component({
   selector: 'app-comentarios',
@@ -19,29 +20,31 @@ export class ComentariosPage implements OnInit {
   currentPage = 1;
   itemsPerPage = 5;
 
-  constructor(private router: Router, private api: ApiserviceService) {
+  constructor(
+    private router: Router,
+    private api: ApiserviceService,
+    private ds: DataService
+  ) {
     if (this.router.getCurrentNavigation()?.extras.state)
       this.state = this.router.getCurrentNavigation()?.extras.state;
   }
 
-  ngOnInit() {
-    this.comentarios = userData.comments || userData['comments'] || [];
-
-    this.api.getComentarios().subscribe(
-      (data) => {
-        this.allComentarios = data;
-        this.paginateComentarios();
-      },
-      (error) => {
-        console.error('Error al obtener comentarios', error);
-      }
-    );
-
-    this.getPlaceHolders();
+  async ngOnInit() {
+    await this.ds.init();
+    this.obtenerComentarios();
   }
 
   irAHome() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/home'], { state: this.state });
+  }
+
+  async obtenerComentarios() {
+    try {
+      this.allComentarios = await this.ds.obtenerComentarios();
+      this.paginateComentarios();
+    } catch (error) {
+      console.error('[ComentariosPage] Error al obtener comentarios:', error);
+    }
   }
 
   getPlaceHolders() {

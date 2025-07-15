@@ -1,15 +1,15 @@
 <ion-content [fullscreen]="true">
-
   <ion-header>
-    <ion-title size="large">MovieIonic</ion-title>
+    <ion-toolbar>
+      <ion-title size="large">Movieonic</ion-title>
+    </ion-toolbar>
   </ion-header>
 
-   <cs-login-form></cs-login-form>
+  <cs-login-form></cs-login-form>
 
-      <div class="btn-navigate">
-    <a (click)="irARegistro()">
-     ¿No tienes cuenta? Regístrate
-    </a>
+  <div class="btn-navigate">
+    <a (click)="irARegistro()"> ¿No tienes cuenta? Regístrate </a>
   </div>
+  <p style="font-weight: bolder; color: blue">Texto BD: {{ texto }}</p>
 </ion-content>
-
+ 

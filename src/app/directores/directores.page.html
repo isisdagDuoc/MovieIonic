@@ -1,22 +1,23 @@
- <ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true">
   <ion-header>
     <ion-toolbar>
       <ion-title size="large">Directores</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  
-    <div class="right btn-navigate">
-    <a (click)="irAHome()">
-      Volver al Home
-    </a>
+  <div class="right btn-navigate">
+    <a (click)="irAHome()"> Volver al Home </a>
   </div>
-  
+
   <ion-list>
     <ng-container *ngFor="let director of directores">
       <ion-item>
         <ion-avatar slot="start">
-          <img [src]="'assets' + director.image" alt="{{ director.name }}">
+          <img
+            [src]="getImageSrc(director.image)"
+            alt="{{ director.name }}"
+            class="movie-img"
+          />
         </ion-avatar>
         <ion-label>
           <h2>{{ director.name }}</h2>
@@ -32,7 +33,11 @@
         </ion-list-header>
         <ion-item *ngFor="let pelicula of getPeliculasDirector(director)">
           <ion-thumbnail slot="start">
-            <img [src]="'assets' + pelicula.image" alt="{{ pelicula.title }}">
+            <img
+              [src]="getImageSrc(pelicula.image)"
+              alt="{{ pelicula.title }}"
+              class="movie-img"
+            />
           </ion-thumbnail>
           <ion-label>
             <span class="pelicula-titulo">{{ pelicula.title }}</span>

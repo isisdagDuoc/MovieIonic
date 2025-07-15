@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
-import { userData } from '../../../assets/mocks/fakeData';
+import { Router, NavigationExtras } from '@angular/router';
+import { DataService } from 'src/app/services/dataservice.service';
 
 @Component({
   selector: 'cs-login-form',
@@ -9,117 +9,84 @@ import { userData } from '../../../assets/mocks/fakeData';
   standalone: false,
 })
 export class LoginFormComponent implements OnInit {
-  data: {
-    username: string;
-    password: string;
-    email?: string;
-  } = {
+  data = {
     username: '',
     password: '',
     email: '',
   };
-  constructor(private router: Router) {}
 
-  showErr(errMsg: String) {
+  constructor(
+    private router: Router,
+    private ds: DataService
+  ) {}
+
+  showErr(errMsg: string) {
     const errorElem: HTMLElement | null = document.getElementById('errCont');
-
-    if (errorElem != null) {
-      const msgElem = document.createTextNode(errMsg.toString());
+    if (errorElem) {
       const itemElem = document.createElement('li');
-      itemElem.appendChild(msgElem);
+      itemElem.textContent = errMsg;
       errorElem.appendChild(itemElem);
     }
   }
 
   clearErrs() {
     const errorElem: HTMLElement | null = document.getElementById('errCont');
-
-    if (errorElem != null) errorElem.innerHTML = '';
+    if (errorElem) errorElem.innerHTML = '';
   }
 
-  validateInputs = () => {
-    const nombreInput = document.getElementById(
-      'nombreUsuario'
-    ) as HTMLInputElement;
-    const correoInput = document.getElementById(
-      'correoUsuario'
-    ) as HTMLInputElement;
-    const passwordInput = document.getElementById(
-      'password'
-    ) as HTMLInputElement;
+  validateInputs(): boolean {
+    const nombreInput = document.getElementById('nombreUsuario') as HTMLInputElement;
+    const correoInput = document.getElementById('correoUsuario') as HTMLInputElement;
+    const passwordInput = document.getElementById('password') as HTMLInputElement;
     let valid = true;
 
     this.clearErrs();
 
-    if (nombreInput?.value === '') {
+    if (!nombreInput?.value) {
       this.showErr('Debe ingresar un nombre de usuario');
       valid = false;
     }
-
-    if (correoInput?.value === '') {
-      this.showErr('Debe ingresar un correo valido');
+    if (!correoInput?.value) {
+      this.showErr('Debe ingresar un correo válido');
       valid = false;
     }
-
-    if (passwordInput?.value.length < 4) {
+    if (!passwordInput?.value || passwordInput.value.length < 4) {
       this.showErr('La contraseña debe tener al menos 4 caracteres.');
       valid = false;
     }
 
-    if (valid) {
-      const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
-
-      const usuarioExiste = storedUsers.some(
-        (user: any) =>
-          user.email === correoInput?.value &&
-          user.password === passwordInput?.value &&
-          user.username === nombreInput?.value
-      );
-
-      if (!usuarioExiste) {
-        this.showErr(
-          'No se encuentra un usuario con dicha contraseña o nombre de usuario.'
-        );
-        valid = false;
-      } else {
-        localStorage.setItem('isLogin', 'true');
-      }
-    }
-
     return valid;
-  };
+  }
 
-  ngOnInit() {}
+  async ngOnInit() {
+    await this.ds.init();
+  }
 
-  doLogin() {
+  async doLogin() {
     this.clearErrs();
+    if (!this.validateInputs()) return;
 
-    const nav = this.router.getCurrentNavigation();
-    const extraMovies = nav?.extras.state?.['movies'] || [];
+    const nombreInput = document.getElementById('nombreUsuario') as HTMLInputElement;
+    const correoInput = document.getElementById('correoUsuario') as HTMLInputElement;
+    const passwordInput = document.getElementById('password') as HTMLInputElement;
 
-    const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+    await this.ds.init();
 
-    const matchedUser = storedUsers.find(
-      (u: any) =>
-        u.username === this.data.username && u.password === this.data.password
-    );
+    const usuario = await this.ds.obtenerUsuario(correoInput.value, passwordInput.value);
 
-    if (
-      matchedUser &&
-      extraMovies.length &&
-      (!matchedUser.movies || matchedUser.movies.length === 0)
-    ) {
-      matchedUser.movies = extraMovies;
-      localStorage.setItem('users', JSON.stringify(storedUsers));
+    if (!usuario) {
+      this.showErr('Usuario o contraseña incorrectos');
+      return;
     }
 
-    localStorage.setItem('isLogin', 'true');
-    localStorage.setItem('loggedUser', this.data.username);
+    localStorage.setItem('loggedUser', usuario.email);
+    localStorage.setItem('loggedPass', usuario.password);
 
     const navExtras: NavigationExtras = {
       state: {
-        username: this.data.username,
-        password: this.data.password,
+        username: usuario.name,
+        email: usuario.email,
+        userId: usuario.id,
       },
     };
 

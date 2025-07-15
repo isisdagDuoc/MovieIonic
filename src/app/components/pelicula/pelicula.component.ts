@@ -1,59 +1,62 @@
-import { Component, OnInit, Input,  AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { userData } from '../../../assets/mocks/fakeData';
-import { NavigationExtras, Router } from '@angular/router';
-import { createAnimation } from '@ionic/angular';
-import { AnimationController } from '@ionic/angular/standalone';
-
-
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { DataService } from 'src/app/services/dataservice.service';
+import { PeliculaCatalogo } from '../../services/DB/models/pelicula-catalogo';
 
 @Component({
   selector: 'app-pelicula',
   templateUrl: './pelicula.component.html',
   styleUrls: ['./pelicula.component.scss'],
-  standalone: false
+  standalone: false,
 })
-export class PeliculaComponent  implements OnInit {
-
-  @Input() id : Number = -1;
-  @Input() state : any;
-  movieInfo : any = {};  
-
-  constructor(private router: Router, private animationCtrl: AnimationController) {}
-
- ngOnInit() {
-    console.log(this.state, '<<<');
-
-    for (let user of userData.users) {
-      if (user.movies) {
-        for (let movie of user.movies) {
-          if (movie.id === Number(this.id)) {
-            this.movieInfo = movie;
-            break;
-          }
-        }
-      }
+export class PeliculaComponent implements OnInit {
+  @Input() set pelicula(value: PeliculaCatalogo | null) {
+    if (value) {
+      this.movieInfo = value;
+      this.peliculaRecibidaDirecta = true;
     }
   }
 
-    private animation!: Animation;
+  @Input() id?: number;
 
-  @ViewChild('cardanimacion', { static: true }) cardAnimacion!: ElementRef;
+  @Input() state: any;
 
-  ngAfterViewInit() {
-    const animation = createAnimation()
-      .addElement(this.cardAnimacion.nativeElement)
-       .duration(3000)
-      .iterations(Infinity)
-      .keyframes([
-        { offset: 0, width: '80px' },
-        { offset: 0.72, width: 'var(--width)' },
-        { offset: 1, width: '240px' },
-      ]);
+  movieInfo: PeliculaCatalogo | null = null;
+  private peliculaRecibidaDirecta = false;
+
+  constructor(private router: Router, private ds: DataService) {}
+
+  async ngOnInit() {
+    await this.ds.init();
+
+    if (this.peliculaRecibidaDirecta && this.movieInfo) {
+      return;
+    }
+
+    if (this.id != null) {
+      const catalogo = await this.ds.obtenerPeliculasCatalogo();
+      this.movieInfo = catalogo.find((p) => p.id === this.id) || null;
+    }
+
+    if (!this.movieInfo) {
+      console.warn('[PeliculaComponent] No se pudo obtener la película.');
+    }
   }
-
 
   irADetallePelicula() {
-    this.router.navigate(['/peliculas/' + this.id], { state: this.state });
+    if (!this.movieInfo) return;
+
+    this.router.navigate(['/peliculas/' + this.movieInfo.id], {
+      state: {
+        ...this.state,
+        pelicula: this.movieInfo,
+      },
+    });
   }
 
+  getImageSrc(path: string | undefined) {
+    if (!path) return 'assets/images/default.jpg';
+    const clean = path.startsWith('/') ? path.substring(1) : path;
+    return `assets/images/${clean}`;
+  }
 }

@@ -8,8 +8,9 @@
   <ion-row>
     <ion-col>
       <ion-row>
-        <ul id="errCont" class="error-class ion-text-center ion-text-danger error-class">
-        </ul>
+        <div *ngIf="mensaje" class="ion-text-center ion-padding" [ngClass]="{'ion-text-danger': mensaje.includes('error') || mensaje.includes('Error') || mensaje.includes('obligatorio') || mensaje.includes('existe'), 'ion-text-success': mensaje.includes('exitosamente')}">
+          {{ mensaje }}
+        </div>
       </ion-row>
     </ion-col>
   </ion-row>
@@ -68,7 +69,7 @@
         class="ion-padding"
         placeholder="{{ data.confirmPassword }}"
         [(ngModel)]="data.confirmPassword"
-        label="Contraseña"
+        label="Repetir contraseña"
         label-placement="floating"
         fill="outline"
         placeholder="Repetir tu contraseña"
