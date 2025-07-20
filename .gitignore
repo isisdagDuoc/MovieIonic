@@ -68,3 +68,22 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Generated assets by Capacitor Assets (keep only source files)
+# Android generated icons and splash screens
+android/app/src/main/res/mipmap-*/ic_launcher*.png
+android/app/src/main/res/mipmap-anydpi-v26/ic_launcher*.xml
+android/app/src/main/res/drawable*/splash.png
+
+# iOS generated icons and splash screens  
+ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-*.png
+ios/App/App/Assets.xcassets/Splash.imageset/Default*.png
+
+# PWA generated icons
+src/assets/icons/icon-*.webp
+
+# Keep source files but ignore auto-generated PNG/WebP versions
+resources/icon.png
+resources/splash.png
+
+# Note: Keep resources/*.svg files tracked as they are source files

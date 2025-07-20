@@ -1,0 +1,59 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo degradado morado -->
+  <defs>
+    <radialGradient id="bgGradient" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#8e44ad"/>
+      <stop offset="100%" stop-color="#6a1b9a"/>
+    </radialGradient>
+    <linearGradient id="filmGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#9b59b6"/>
+      <stop offset="50%" stop-color="#8e44ad"/>
+      <stop offset="100%" stop-color="#9b59b6"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Fondo del icono -->
+  <rect width="1024" height="1024" rx="180" fill="url(#bgGradient)"/>
+  
+  <!-- Cinta de película principal -->
+  <rect x="80" y="280" width="864" height="180" rx="25" fill="url(#filmGradient)" stroke="#ffffff" stroke-width="4"/>
+  
+  <!-- Perforaciones de la película (lado izquierdo) -->
+  <circle cx="140" cy="320" r="25" fill="#ffffff"/>
+  <circle cx="140" cy="380" r="25" fill="#ffffff"/>
+  <circle cx="140" cy="440" r="25" fill="#ffffff"/>
+  
+  <!-- Perforaciones de la película (lado derecho) -->
+  <circle cx="884" cy="320" r="25" fill="#ffffff"/>
+  <circle cx="884" cy="380" r="25" fill="#ffffff"/>
+  <circle cx="884" cy="440" r="25" fill="#ffffff"/>
+  
+  <!-- Fotogramas de la película -->
+  <rect x="220" y="310" width="80" height="60" rx="8" fill="#ffffff" opacity="0.9"/>
+  <rect x="320" y="310" width="80" height="60" rx="8" fill="#ffffff" opacity="0.7"/>
+  <rect x="420" y="310" width="80" height="60" rx="8" fill="#ffffff" opacity="0.9"/>
+  <rect x="520" y="310" width="80" height="60" rx="8" fill="#ffffff" opacity="0.7"/>
+  <rect x="620" y="310" width="80" height="60" rx="8" fill="#ffffff" opacity="0.9"/>
+  <rect x="720" y="310" width="80" height="60" rx="8" fill="#ffffff" opacity="0.7"/>
+  
+  <rect x="220" y="390" width="80" height="60" rx="8" fill="#ffffff" opacity="0.7"/>
+  <rect x="320" y="390" width="80" height="60" rx="8" fill="#ffffff" opacity="0.9"/>
+  <rect x="420" y="390" width="80" height="60" rx="8" fill="#ffffff" opacity="0.7"/>
+  <rect x="520" y="390" width="80" height="60" rx="8" fill="#ffffff" opacity="0.9"/>
+  <rect x="620" y="390" width="80" height="60" rx="8" fill="#ffffff" opacity="0.7"/>
+  <rect x="720" y="390" width="80" height="60" rx="8" fill="#ffffff" opacity="0.9"/>
+  
+  <!-- Símbolo de película en el centro -->
+  <circle cx="512" cy="200" r="80" fill="#ffffff" opacity="0.2"/>
+  <circle cx="512" cy="200" r="50" fill="#ffffff"/>
+  <circle cx="512" cy="200" r="20" fill="#8e44ad"/>
+  
+  <!-- Símbolo de película en la parte inferior -->
+  <circle cx="512" cy="580" r="80" fill="#ffffff" opacity="0.2"/>
+  <circle cx="512" cy="580" r="50" fill="#ffffff"/>
+  <circle cx="512" cy="580" r="20" fill="#8e44ad"/>
+  
+  <!-- Texto del nombre de la app -->
+  <text x="512" y="720" font-family="Arial, sans-serif" font-size="60" font-weight="bold" text-anchor="middle" fill="#ffffff">MovieIonic</text>
+  <text x="512" y="780" font-family="Arial, sans-serif" font-size="35" text-anchor="middle" fill="#ffffff" opacity="0.8">Tu catálogo de películas</text>
+</svg>
