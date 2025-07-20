@@ -34,9 +34,8 @@ export class AgregarPage implements OnInit {
 
     if (this.ds.isReady()) {
       this.availableMovies = await this.ds.obtenerPeliculasCatalogo();
-      console.log('Películas cargadas:', this.availableMovies);
     } else {
-      console.warn('DB o Storage no está listo.');
+      this.mensaje = 'Error: No se pudieron cargar las películas.';
     }
   }
 
@@ -47,9 +46,8 @@ export class AgregarPage implements OnInit {
   async obtenerPeliculas() {
     if (this.ds.isReady()) {
       this.availableMovies = await this.ds.obtenerPeliculasCatalogo();
-      console.log('Películas cargadas:', this.availableMovies);
     } else {
-      console.warn('DB o Storage no está listo.');
+      this.mensaje = 'Error: No se pudieron recargar las películas.';
     }
   }
 
@@ -82,6 +80,7 @@ export class AgregarPage implements OnInit {
       genre: p.genre,
       image: p.image,
       directorId: p.director?.id || 0,
+      description: p.description || '',
     }));
 
     const nuevoUsuario: Usuario = {
@@ -122,7 +121,6 @@ export class AgregarPage implements OnInit {
         peliculas: movies.map((p) => p.title),
       },
     };
-    console.log('se registro?', JSON.stringify(usuarioCreado));
 
     this.router.navigate(['/login'], navExtras);
   }

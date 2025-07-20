@@ -1,50 +1,73 @@
-<ion-content [fullscreen]="true">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title size="large">Directores</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-header class="unified-header">
+  <ion-toolbar>
+    <ion-title class="unified-title">
+      <ion-icon name="people-outline" class="title-icon"></ion-icon>
+      Directores
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-button
+        fill="clear"
+        color="light"
+        (click)="irAHome()"
+        class="unified-back-button"
+      >
+        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
-  <div class="right btn-navigate">
-    <a (click)="irAHome()"> Volver al Home </a>
+<ion-content class="unified-content">
+  <div class="page-container">
+
+    <ion-list class="directors-list">
+      <ng-container *ngFor="let director of directores">
+        <!-- Tarjeta del Director -->
+        <ion-card class="director-card unified-card">
+          <ion-card-header>
+            <ion-item lines="none" class="director-item">
+              <ion-avatar slot="start" class="director-avatar">
+                <img
+                  [src]="getImageSrc(director.image)"
+                  alt="{{ director.name }}"
+                  class="movie-img"
+                />
+              </ion-avatar>
+              <ion-label>
+                <h1 class="director-name">{{ director.name }}</h1>
+                <p class="director-info">{{ director.birthYear }} - {{ director.nationality }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-card-header>
+        </ion-card>
+
+        <!-- Tarjeta de Películas del Director -->
+        <ion-card class="movies-card unified-card">
+          <ion-card-header>
+            <ion-card-title class="movies-header">
+              <ion-icon name="film-outline" class="movies-icon"></ion-icon>
+              Películas de {{ director.name }}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list lines="none" class="movies-list">
+              <ion-item *ngFor="let pelicula of getPeliculasDirector(director)" class="movie-item">
+                <ion-thumbnail slot="start" class="movie-thumbnail">
+                  <img
+                    [src]="getImageSrc(pelicula.image)"
+                    alt="{{ pelicula.title }}"
+                    class="movie-img"
+                  />
+                </ion-thumbnail>
+                <ion-label>
+                  <h3 class="pelicula-titulo">{{ pelicula.title }}</h3>
+                  <p class="pelicula-year">{{ pelicula.year }}</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
+    </ion-list>
   </div>
-
-  <ion-list>
-    <ng-container *ngFor="let director of directores">
-      <ion-item>
-        <ion-avatar slot="start">
-          <img
-            [src]="getImageSrc(director.image)"
-            alt="{{ director.name }}"
-            class="movie-img"
-          />
-        </ion-avatar>
-        <ion-label>
-          <h2>{{ director.name }}</h2>
-          <p>{{ director.birthYear }} - {{ director.nationality }}</p>
-        </ion-label>
-      </ion-item>
-
-      <ion-list lines="none" class="pelis-list">
-        <ion-list-header>
-          <ion-label>
-            <span class="pelis-header">Películas de {{ director.name }}</span>
-          </ion-label>
-        </ion-list-header>
-        <ion-item *ngFor="let pelicula of getPeliculasDirector(director)">
-          <ion-thumbnail slot="start">
-            <img
-              [src]="getImageSrc(pelicula.image)"
-              alt="{{ pelicula.title }}"
-              class="movie-img"
-            />
-          </ion-thumbnail>
-          <ion-label>
-            <span class="pelicula-titulo">{{ pelicula.title }}</span>
-            <p>{{ pelicula.year }}</p>
-          </ion-label>
-        </ion-item>
-      </ion-list>
-    </ng-container>
-  </ion-list>
 </ion-content>

@@ -1,51 +1,83 @@
-<ion-grid>
-  <ion-row>
-    <ion-col>
-      <ion-row>
-      <ul id="errCont" class="error-class ion-text-center ion-text-danger">        
-      </ul>    
-      </ion-row>  
-    </ion-col>
-  </ion-row> 
-  <ion-row>
-    <ion-col>
-      <ion-input 
-        id="nombreUsuario"
-        class="ion-padding"
-        placeholder="{{ data.username }}"
-        [(ngModel)]="data.username"
+<div class="login-container">
+  <!-- Header con título e icono -->
+  <div class="login-header">
+    <ion-icon name="film-outline" class="login-icon"></ion-icon>
+    <h1 class="login-title">MovieIonic</h1>
+    <p class="login-subtitle">Inicia sesión para acceder a tu catálogo de películas</p>
+  </div>
 
-         label="Nombre" label-placement="floating" fill="outline" placeholder="Ingresa tu nombre"
-      ></ion-input>      
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col>
-      <ion-input
-        id="correoUsuario"
-        class="ion-padding" 
-        placeholder="{{ data.email }}" 
-        [(ngModel)]="data.email"
-        label="Correo" label-placement="floating" fill="outline" placeholder="Ingresa tu correo"
+  <!-- Formulario de login -->
+  <div class="login-form">
+    <!-- Contenedor de errores -->
+    <div class="message-container">
+      <div *ngIf="showError" class="message-alert error-message">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        {{ errorMessage }}
+      </div>
+    </div>
 
-      ></ion-input>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col>
-      <ion-input
-        id="password"
-        type="password" 
-        class="ion-padding" 
-        placeholder="{{ data.password }}" 
-        [(ngModel)]="data.password"
-         label="Contraseña" label-placement="floating" fill="outline" placeholder="Ingresa tu ontraseña"
-      ></ion-input>
-    </ion-col>
-  </ion-row>
-  <ion-row class="ion-text-center">
-    <ion-col>
-      <ion-button expand="full" (click)="doLogin()">Ingresar</ion-button>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+    <!-- Campo Nombre -->
+    <div class="input-group">
+      <ion-item lines="none" class="custom-input">
+        <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
+        <ion-input 
+          id="nombreUsuario"
+          [(ngModel)]="data.username"
+          label="Nombre de usuario" 
+          label-placement="floating" 
+          fill="outline" 
+          placeholder="Ingresa tu nombre"
+          clearInput="true">
+        </ion-input>
+      </ion-item>
+    </div>
+
+    <!-- Campo Correo -->
+    <div class="input-group">
+      <ion-item lines="none" class="custom-input">
+        <ion-icon name="mail-outline" slot="start" color="primary"></ion-icon>
+        <ion-input 
+          id="correoUsuario"
+          [(ngModel)]="data.email"
+          type="email"
+          label="Correo electrónico" 
+          label-placement="floating" 
+          fill="outline" 
+          placeholder="Ingresa tu correo"
+          clearInput="true">
+        </ion-input>
+      </ion-item>
+    </div>
+
+    <!-- Campo Contraseña -->
+    <div class="input-group">
+      <ion-item lines="none" class="custom-input">
+        <ion-icon name="lock-closed-outline" slot="start" color="primary"></ion-icon>
+        <ion-input 
+          id="password"
+          type="password"
+          [(ngModel)]="data.password"
+          label="Contraseña" 
+          label-placement="floating" 
+          fill="outline" 
+          placeholder="Ingresa tu contraseña"
+          clearInput="true">
+        </ion-input>
+      </ion-item>
+    </div>
+
+    <!-- Botón de login -->
+    <div class="login-button-container">
+      <ion-button 
+        expand="block" 
+        shape="round" 
+        size="large"
+        color="primary"
+        (click)="doLogin()"
+        class="login-button">
+        <ion-icon name="log-in-outline" slot="start"></ion-icon>
+        Iniciar Sesión
+      </ion-button>
+    </div>
+  </div>
+</div>

@@ -14,6 +14,11 @@ export default defineConfig({
       framework: "angular",
       bundler: "webpack",
     },
-    specPattern: "**/*.cy.ts"
+    specPattern: "**/*.cy.ts",
+    supportFile: "cypress/support/component.ts",
+    indexHtmlFile: "cypress/support/component-index.html",
+    video: false,
+    viewportWidth: 1000,
+    viewportHeight: 600
   },
 });

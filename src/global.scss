@@ -36,10 +36,9 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 // @import "@ionic/angular/css/palettes/dark.system.css";
 
-/* ─── Fuente global ───────────────────────────── */
+/* ─── Variables globales ───────────────────────── */
 body {
-  font-family: 'Bodoni Moda', serif;
-    --ion-background-color: #f9f6ff;
+  --ion-background-color: #f9f6ff;
   --ion-text-color: #222;
 }
 
@@ -51,5 +50,61 @@ body {
   --ion-color-accent-contrast-rgb: 255, 255, 255;
   --ion-color-accent-shade: #a770dd;
   --ion-color-accent-tint: #c89bff;
+}
+
+
+ion-item.custom-input {
+  --border-width: 0 !important;
+  --inner-border-width: 0 !important;
+  --highlight-height: 0 !important;
+  --border-color: transparent !important;
+  --inner-border-color: transparent !important;
+  border: none !important;
+  
+  &::part(native) {
+    border: none !important;
+    border-bottom: none !important;
+  }
+  
+  .item-inner {
+    border: none !important;
+    border-bottom: none !important;
+  }
+  
+  &::after,
+  &::before {
+    display: none !important;
+  }
+}
+
+/* Eliminar líneas específicas de ion-input */
+ion-input {
+  --border-width: 0 !important;
+  --highlight-height: 0 !important;
+  border: none !important;
+  
+  &::part(native) {
+    border: none !important;
+  }
+}
+
+/* Eliminar líneas de todos los ion-item con lines="none" */
+ion-item[lines="none"] {
+  --border-width: 0 !important;
+  --inner-border-width: 0 !important;
+  --highlight-height: 0 !important;
+  --border-color: transparent !important;
+  --inner-border-color: transparent !important;
+  border: none !important;
+  
+  .item-inner {
+    border: none !important;
+    border-bottom: none !important;
+  }
+  
+  &::after,
+  &::before {
+    display: none !important;
+  }
 }
 

@@ -14,6 +14,9 @@ export class LoginFormComponent implements OnInit {
     password: '',
     email: '',
   };
+  
+  errorMessage: string = '';
+  showError: boolean = false;
 
   constructor(
     private router: Router,
@@ -21,37 +24,39 @@ export class LoginFormComponent implements OnInit {
   ) {}
 
   showErr(errMsg: string) {
-    const errorElem: HTMLElement | null = document.getElementById('errCont');
-    if (errorElem) {
-      const itemElem = document.createElement('li');
-      itemElem.textContent = errMsg;
-      errorElem.appendChild(itemElem);
-    }
+    this.errorMessage = errMsg;
+    this.showError = true;
+    
+    // Auto-hide error after 5 seconds
+    setTimeout(() => {
+      this.clearErrs();
+    }, 5000);
   }
 
   clearErrs() {
-    const errorElem: HTMLElement | null = document.getElementById('errCont');
-    if (errorElem) errorElem.innerHTML = '';
+    this.errorMessage = '';
+    this.showError = false;
   }
 
   validateInputs(): boolean {
-    const nombreInput = document.getElementById('nombreUsuario') as HTMLInputElement;
-    const correoInput = document.getElementById('correoUsuario') as HTMLInputElement;
-    const passwordInput = document.getElementById('password') as HTMLInputElement;
     let valid = true;
-
     this.clearErrs();
 
-    if (!nombreInput?.value) {
+    if (!this.data.username?.trim()) {
       this.showErr('Debe ingresar un nombre de usuario');
       valid = false;
     }
-    if (!correoInput?.value) {
+    
+    if (!this.data.email?.trim()) {
       this.showErr('Debe ingresar un correo válido');
       valid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.data.email)) {
+      this.showErr('El formato del correo no es válido');
+      valid = false;
     }
-    if (!passwordInput?.value || passwordInput.value.length < 4) {
-      this.showErr('La contraseña debe tener al menos 4 caracteres.');
+    
+    if (!this.data.password || this.data.password.length < 4) {
+      this.showErr('La contraseña debe tener al menos 4 caracteres');
       valid = false;
     }
 
@@ -66,30 +71,33 @@ export class LoginFormComponent implements OnInit {
     this.clearErrs();
     if (!this.validateInputs()) return;
 
-    const nombreInput = document.getElementById('nombreUsuario') as HTMLInputElement;
-    const correoInput = document.getElementById('correoUsuario') as HTMLInputElement;
-    const passwordInput = document.getElementById('password') as HTMLInputElement;
+    try {
+      await this.ds.init();
 
-    await this.ds.init();
+      const usuario = await this.ds.obtenerUsuario(this.data.email, this.data.password);
 
-    const usuario = await this.ds.obtenerUsuario(correoInput.value, passwordInput.value);
+      if (!usuario) {
+        this.showErr('Usuario o contraseña incorrectos');
+        return;
+      }
 
-    if (!usuario) {
-      this.showErr('Usuario o contraseña incorrectos');
-      return;
+      localStorage.setItem('loggedUser', usuario.email);
+      localStorage.setItem('loggedPass', usuario.password);
+
+      const navExtras: NavigationExtras = {
+        state: {
+          username: usuario.name,
+          email: usuario.email,
+          userId: usuario.id,
+        },
+      };
+
+      this.data = { username: '', password: '', email: '' };
+      
+      this.router.navigate(['/home'], navExtras);
+    } catch (error) {
+      console.error('Error during login:', error);
+      this.showErr('Error al iniciar sesión. Intente nuevamente.');
     }
-
-    localStorage.setItem('loggedUser', usuario.email);
-    localStorage.setItem('loggedPass', usuario.password);
-
-    const navExtras: NavigationExtras = {
-      state: {
-        username: usuario.name,
-        email: usuario.email,
-        userId: usuario.id,
-      },
-    };
-
-    this.router.navigate(['/home'], navExtras);
   }
 }

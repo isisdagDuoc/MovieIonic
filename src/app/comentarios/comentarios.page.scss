@@ -1,3 +1,160 @@
+// Estilos unificados para consistencia visual
+.unified-header {
+  ion-toolbar {
+    --background: linear-gradient(135deg, #7b2cbf 0%, #9d4edd 50%, #c77dff 100%);
+    --color: white;
+    --border-color: transparent;
+    box-shadow: 0 4px 20px rgba(123, 44, 191, 0.3);
+  }
+}
+
+.unified-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 1.3rem;
+  
+  .title-icon {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+.unified-back-button {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  
+  ion-icon {
+    font-size: 1.5rem;
+  }
+}
+
+.unified-content {
+  --background: #f9f6ff;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.page-container {
+  padding: 1.5rem;
+  min-height: 100%;
+}
+
+.unified-card {
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(123, 44, 191, 0.1);
+  border: 1px solid rgba(123, 44, 191, 0.1);
+  margin: 1rem 0;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(123, 44, 191, 0.15);
+  }
+}
+
+.comments-section {
+  .section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #7b2cbf;
+      margin: 0 0 0.5rem 0;
+      line-height: 1.3;
+    }
+    
+    .section-subtitle {
+      font-size: 1rem;
+      color: #666;
+      margin: 0;
+      opacity: 0.8;
+    }
+  }
+  
+  .comments-list {
+    padding: 0;
+    margin-bottom: 2rem;
+  }
+  
+  .comment-card {
+    .comment-item {
+      --padding-start: 0;
+      --padding-end: 0;
+      --inner-padding-end: 0;
+    }
+    
+    .comment-avatar {
+      width: 50px;
+      height: 50px;
+      margin-right: 16px;
+      
+      img {
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid rgba(123, 44, 191, 0.2);
+      }
+    }
+    
+    .comment-author {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #7b2cbf;
+      margin: 0 0 8px 0;
+      line-height: 1.2;
+    }
+    
+    .comment-text {
+      font-size: 0.95rem;
+      color: #333;
+      margin: 0;
+      line-height: 1.4;
+      opacity: 0.9;
+    }
+  }
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  
+  .pagination-button {
+    --border-radius: 20px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    
+    &:hover:not([disabled]) {
+      transform: translateY(-1px);
+    }
+    
+    ion-icon {
+      font-size: 1.1rem;
+    }
+  }
+  
+  .page-info {
+    flex: 1;
+    text-align: center;
+    
+    .page-text {
+      font-size: 0.9rem;
+      color: #666;
+      font-weight: 500;
+    }
+  }
+}
+
+// Estilos legacy mantenidos para compatibilidad
 .comentario-card {
   margin-bottom: 16px;
   border-radius: 12px;

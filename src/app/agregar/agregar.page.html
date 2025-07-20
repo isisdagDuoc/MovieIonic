@@ -1,102 +1,113 @@
-<ion-content [fullscreen]="true">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title size="large">Registrarse</ion-title>
-    </ion-toolbar>
-  </ion-header>
-<ion-grid>
-  <ion-row>
-    <ion-col>
-      <ion-row>
-        <div *ngIf="mensaje" class="ion-text-center ion-padding" [ngClass]="{'ion-text-danger': mensaje.includes('error') || mensaje.includes('Error') || mensaje.includes('obligatorio') || mensaje.includes('existe'), 'ion-text-success': mensaje.includes('exitosamente')}">
+<ion-content [fullscreen]="true" class="register-page-content">
+  <div class="register-container">
+    <div class="register-header">
+      <ion-icon name="person-add-outline" class="register-icon"></ion-icon>
+      <h1 class="register-title">Crear Cuenta</h1>
+      <p class="register-subtitle">Únete a MovieIonic y descubre tu catálogo personalizado</p>
+    </div>
+
+    <div class="register-form">
+      <div class="message-container">
+        <div *ngIf="mensaje" class="message-alert" 
+             [ngClass]="{'error-message': mensaje.includes('error') || mensaje.includes('Error') || mensaje.includes('obligatorio') || mensaje.includes('existe'), 
+                        'success-message': mensaje.includes('exitosamente')}">
+          <ion-icon [name]="mensaje.includes('exitosamente') ? 'checkmark-circle-outline' : 'alert-circle-outline'"></ion-icon>
           {{ mensaje }}
         </div>
-      </ion-row>
-    </ion-col>
-  </ion-row>
+      </div>
 
-  <ion-row>
-    <ion-col>
-      <ion-input 
-        id="nombreUsuario"
-        class="ion-padding"
-        placeholder="{{ data.username }}"
-        [(ngModel)]="data.username"
-        label="Nombre"
-        label-placement="floating"
-        fill="outline"
-        placeholder="Ingresa tu nombre"
-      ></ion-input>
-    </ion-col>
-  </ion-row>
+      <div class="input-group">
+        <ion-item lines="none" class="custom-input">
+          <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
+          <ion-input 
+            id="nombreUsuario"
+            [(ngModel)]="data.username"
+            label="Nombre completo" 
+            label-placement="floating" 
+            fill="outline" 
+            placeholder="Ingresa tu nombre"
+            clearInput="true">
+          </ion-input>
+        </ion-item>
+      </div>
 
-  <ion-row>
-    <ion-col>
-      <ion-input
-        id="correoUsuario"
-        class="ion-padding"
-        placeholder="{{ data.email }}"
-        [(ngModel)]="data.email"
-        label="Correo"
-        label-placement="floating"
-        fill="outline"
-        placeholder="Ingresa tu correo"
-      ></ion-input>
-    </ion-col>
-  </ion-row>
+      <div class="input-group">
+        <ion-item lines="none" class="custom-input">
+          <ion-icon name="mail-outline" slot="start" color="primary"></ion-icon>
+          <ion-input 
+            id="correoUsuario"
+            [(ngModel)]="data.email"
+            type="email"
+            label="Correo electrónico" 
+            label-placement="floating" 
+            fill="outline" 
+            placeholder="Ingresa tu correo"
+            clearInput="true">
+          </ion-input>
+        </ion-item>
+      </div>
 
-  <ion-row>
-    <ion-col>
-      <ion-input
-        id="password"
-        type="password"
-        class="ion-padding"
-        placeholder="{{ data.password }}"
-        [(ngModel)]="data.password"
-        label="Contraseña"
-        label-placement="floating"
-        fill="outline"
-        placeholder="Ingresa tu contraseña"
-      ></ion-input>
-    </ion-col>
-  </ion-row>
+      <div class="input-group">
+        <ion-item lines="none" class="custom-input">
+          <ion-icon name="lock-closed-outline" slot="start" color="primary"></ion-icon>
+          <ion-input 
+            id="password"
+            type="password"
+            [(ngModel)]="data.password"
+            label="Contraseña" 
+            label-placement="floating" 
+            fill="outline" 
+            placeholder="Crea una contraseña"
+            clearInput="true">
+          </ion-input>
+        </ion-item>
+      </div>
 
-    <ion-row>
-    <ion-col>
-      <ion-input
-        id="confirmPassword"
-        type="password"
-        class="ion-padding"
-        placeholder="{{ data.confirmPassword }}"
-        [(ngModel)]="data.confirmPassword"
-        label="Repetir contraseña"
-        label-placement="floating"
-        fill="outline"
-        placeholder="Repetir tu contraseña"
-      ></ion-input>
-    </ion-col>
-  </ion-row>
+      <div class="input-group">
+        <ion-item lines="none" class="custom-input">
+          <ion-icon name="shield-checkmark-outline" slot="start" color="primary"></ion-icon>
+          <ion-input 
+            id="confirmPassword"
+            type="password"
+            [(ngModel)]="data.confirmPassword"
+            label="Confirmar contraseña" 
+            label-placement="floating" 
+            fill="outline" 
+            placeholder="Repite tu contraseña"
+            clearInput="true">
+          </ion-input>
+        </ion-item>
+      </div>
 
-  <ion-row>
-  <ion-col>
-    <ion-select
-      label="Películas favoritas"
-      label-placement="floating"
-      multiple="true"
-      [(ngModel)]="data.movies"
-    >
-      <ion-select-option *ngFor="let pelicula of availableMovies" [value]="pelicula">
-        {{ pelicula.title }}
-      </ion-select-option>
-    </ion-select>
-  </ion-col>
-</ion-row>
+      <div class="input-group">
+        <ion-item lines="none" class="custom-input select-input">
+          <ion-icon name="heart-outline" slot="start" color="primary"></ion-icon>
+          <ion-select
+            [(ngModel)]="data.movies"
+            label="Películas favoritas"
+            label-placement="floating"
+            multiple="true"
+            placeholder="Selecciona tus favoritas"
+            interface="popover">
+            <ion-select-option *ngFor="let pelicula of availableMovies" [value]="pelicula">
+              {{ pelicula.title }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
 
-
-  <ion-row class="ion-text-center">
-    <ion-col>
-      <ion-button expand="full" (click)="doRegistro()">Registrarse</ion-button>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+      <div class="register-button-container">
+        <ion-button 
+          expand="block" 
+          shape="round" 
+          size="large"
+          color="primary"
+          (click)="doRegistro()"
+          class="register-button">
+          <ion-icon name="person-add-outline" slot="start"></ion-icon>
+          Crear Cuenta
+        </ion-button>
+      </div>
+    </div>
+  </div>
 </ion-content>

@@ -35,3 +35,5 @@
 //     }
 //   }
 // }
+
+// Comandos personalizados para pruebas de componentes

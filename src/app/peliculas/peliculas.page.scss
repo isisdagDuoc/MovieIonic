@@ -1,12 +1,333 @@
+// Estilos unificados para consistencia visual
+.unified-header {
+  ion-toolbar {
+    --background: linear-gradient(135deg, #7b2cbf 0%, #9d4edd 50%, #c77dff 100%);
+    --color: white;
+    --border-color: transparent;
+    box-shadow: 0 4px 20px rgba(123, 44, 191, 0.3);
+  }
+}
+
+.unified-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 1.3rem;
+  
+  .title-icon {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+.unified-back-button {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  
+  ion-icon {
+    font-size: 1.5rem;
+  }
+}
+
+.unified-content {
+  --background: #f9f6ff;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.page-container {
+  padding: 1.5rem;
+  min-height: 100%;
+}
+
+.unified-card {
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(123, 44, 191, 0.1);
+  border: 1px solid rgba(123, 44, 191, 0.1);
+  margin: 1rem 0;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(123, 44, 191, 0.15);
+  }
+}
+
+.movie-section {
+  .movie-card {
+    max-width: 600px;
+    margin: 0 auto;
+    overflow: hidden;
+    
+    .movie-image-container {
+      position: relative;
+      
+      .movie-img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        display: block;
+      }
+      
+      .movie-rating-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        
+        .rating-icon {
+          color: #ffd700;
+          font-size: 1rem;
+        }
+        
+        .rating-text {
+          font-weight: 600;
+          font-size: 0.9rem;
+        }
+      }
+    }
+    
+    .movie-header {
+      .movie-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #7b2cbf;
+        margin: 0 0 8px 0;
+        line-height: 1.2;
+      }
+      
+      .movie-subtitle {
+        font-size: 1rem;
+        color: #666;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin: 0;
+        
+        .info-icon {
+          font-size: 0.9rem;
+          margin: 0 2px;
+          opacity: 0.7;
+        }
+      }
+    }
+    
+    .movie-content {
+      .description-section {
+        margin-top: 20px;
+        
+        .description-title {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 1.2rem;
+          font-weight: 600;
+          color: #7b2cbf;
+          margin: 0 0 12px 0;
+          
+          .description-icon {
+            font-size: 1.3rem;
+            color: #9d4edd;
+          }
+        }
+        
+        .description-text {
+          font-size: 1rem;
+          line-height: 1.6;
+          color: #333;
+          margin: 0;
+          text-align: justify;
+        }
+      }
+      
+      .no-description {
+        margin-top: 20px;
+        
+        .no-description-content {
+          text-align: center;
+          padding: 20px;
+          background: rgba(123, 44, 191, 0.05);
+          border-radius: 12px;
+          border: 1px dashed rgba(123, 44, 191, 0.3);
+          
+          .no-desc-icon {
+            font-size: 2rem;
+            color: #9d4edd;
+            margin-bottom: 8px;
+          }
+          
+          .no-desc-text {
+            font-size: 0.95rem;
+            color: #666;
+            margin: 0;
+            font-style: italic;
+          }
+        }
+      }
+    }
+  }
+}
+
+.loading-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  
+  .loading-card {
+    max-width: 400px;
+    margin: 0 auto;
+    
+    .loading-content {
+      text-align: center;
+      padding: 2rem 1rem;
+      
+      .loading-animation {
+        margin-bottom: 1.5rem;
+        
+        .loading-icon {
+          font-size: 4rem;
+          color: #9d4edd;
+          animation: pulse 2s infinite;
+        }
+      }
+      
+      .loading-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #7b2cbf;
+        margin: 0 0 8px 0;
+      }
+      
+      .loading-text {
+        font-size: 1rem;
+        color: #666;
+        margin: 0 0 1.5rem 0;
+        line-height: 1.4;
+      }
+      
+      .loading-button {
+        --border-radius: 20px;
+        --padding-start: 20px;
+        --padding-end: 20px;
+        font-weight: 500;
+        
+        ion-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+}
+
+// Estilos legacy mantenidos para compatibilidad
 body {
-  font-family: 'Bodoni Moda', serif;
-    --ion-background-color: #f9f6ff;
+  --ion-background-color: #f9f6ff;
   --ion-text-color: #222;
 }
 
-.movie-img{
+.right {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 20px;
+  
+  .back-button {
+    --border-radius: 50%;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    
+    ion-icon {
+      font-size: 24px;
+    }
+    
+    &:hover {
+      --background: rgba(190, 138, 255, 0.1);
+    }
+  }
+}
+
+.movie-img {
   width: 100%;
   height: auto;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.description-section {
+  margin-top: 16px;
+  
+  h4 {
+    color: var(--ion-color-primary);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  
+  .description-text {
+    line-height: 1.6;
+    color: var(--ion-text-color);
+    text-align: justify;
+    margin: 0;
+  }
+}
+
+.no-description {
+  margin-top: 16px;
+  text-align: center;
+  
+  p {
+    color: var(--ion-color-medium);
+    font-style: italic;
+  }
+}
+
+ion-card {
+  background-color: var(--ion-background-color);
+  margin: 16px 0;
+  box-shadow: 0 4px 12px rgba(190, 138, 255, 0.1);
+  border-radius: 12px;
+  
+  ion-card-title {
+    color: var(--ion-color-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  
+  ion-card-subtitle {
+    color: var(--ion-text-color);
+    opacity: 0.8;
+    font-size: 1rem;
+  }
+  
+  p {
+    margin: 8px 0;
+    
+    strong {
+      color: var(--ion-color-primary);
+    }
+  }
 }
