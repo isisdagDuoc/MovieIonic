@@ -62,8 +62,9 @@ describe("HomePage - Pruebas Unitarias", () => {
       ]
     })
 
-    cy.get("ion-header").should("exist")
-    cy.get("ion-content").should("exist")
+    cy.get("ion-header.unified-header").should("exist")
+    cy.get("ion-content.unified-content").should("exist")
+    cy.get(".page-container").should("exist")
   })
 
   it("debe mostrar enlaces de navegación", () => {

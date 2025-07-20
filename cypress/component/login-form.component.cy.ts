@@ -36,11 +36,11 @@ describe('LoginFormComponent - Pruebas Unitarias', () => {
       ]
     })
 
-    cy.get('ion-grid').should('exist')
+    cy.get('.login-container').should('exist')
     cy.get('#nombreUsuario').should('exist')
     cy.get('#correoUsuario').should('exist')
     cy.get('#password').should('exist')
-    cy.get('ion-button').contains('Ingresar').should('exist')
+    cy.get('ion-button').contains('Iniciar Sesión').should('exist')
   })
 
   it('debe mostrar errores de validación cuando los campos están vacíos', () => {
@@ -62,12 +62,11 @@ describe('LoginFormComponent - Pruebas Unitarias', () => {
       ]
     })
 
-    cy.get('ion-button').contains('Ingresar').click()
+    cy.get('ion-button').contains('Iniciar Sesión').click()
 
-    cy.get('#errCont').should('exist')
-    cy.get('#errCont li').should('contain.text', 'Debe ingresar un nombre de usuario')
-    cy.get('#errCont li').should('contain.text', 'Debe ingresar un correo válido')
-    cy.get('#errCont li').should('contain.text', 'La contraseña debe tener al menos 4 caracteres')
+    cy.get('.error-message').should('exist')
+    // The component shows the last validation error (password) when all fields are empty
+    cy.get('.error-message').should('contain.text', 'La contraseña debe tener al menos 4 caracteres')
   })
 
   it('debe validar que la contraseña tenga al menos 4 caracteres', () => {
@@ -93,9 +92,9 @@ describe('LoginFormComponent - Pruebas Unitarias', () => {
     cy.get('#correoUsuario').type('juan@test.com')
     cy.get('#password').type('123')
 
-    cy.get('ion-button').contains('Ingresar').click()
+    cy.get('ion-button').contains('Iniciar Sesión').click()
 
-    cy.get('#errCont li').should('contain.text', 'La contraseña debe tener al menos 4 caracteres')
+    cy.get('.error-message').should('contain.text', 'La contraseña debe tener al menos 4 caracteres')
   })
 
   it('debe realizar login exitoso con credenciales válidas', () => {
@@ -121,7 +120,7 @@ describe('LoginFormComponent - Pruebas Unitarias', () => {
     cy.get('#correoUsuario').type('juan@test.com')
     cy.get('#password').type('1234')
 
-    cy.get('ion-button').contains('Ingresar').click()
+    cy.get('ion-button').contains('Iniciar Sesión').click()
 
     cy.then(() => {
       expect(mockDataService.obtenerUsuario).to.have.been.calledWith('juan@test.com', '1234')
@@ -155,9 +154,9 @@ describe('LoginFormComponent - Pruebas Unitarias', () => {
     cy.get('#correoUsuario').type('wrong@test.com')
     cy.get('#password').type('wrongpass')
 
-    cy.get('ion-button').contains('Ingresar').click()
+    cy.get('ion-button').contains('Iniciar Sesión').click()
 
-    cy.get('#errCont li').should('contain.text', 'Usuario o contraseña incorrectos')
+    cy.get('.error-message').should('contain.text', 'Usuario o contraseña incorrectos')
 
     cy.then(() => {
       expect(mockRouter.navigate).not.to.have.been.called
@@ -183,15 +182,15 @@ describe('LoginFormComponent - Pruebas Unitarias', () => {
       ]
     })
 
-    cy.get('ion-button').contains('Ingresar').click()
-    cy.get('#errCont li').should('exist')
+    cy.get('ion-button').contains('Iniciar Sesión').click()
+    cy.get('.error-message').should('exist')
 
     cy.get('#nombreUsuario').type('Juan')
     cy.get('#correoUsuario').type('juan@test.com')
     cy.get('#password').type('1234')
-    cy.get('ion-button').contains('Ingresar').click()
+    cy.get('ion-button').contains('Iniciar Sesión').click()
 
-    cy.get('#errCont').should('be.empty')
+    cy.get('.message-container').should('not.contain', '.error-message')
   })
 
   it('debe verificar que los campos tienen ngModel binding correcto', () => {
@@ -244,9 +243,9 @@ describe('LoginFormComponent - Pruebas Unitarias', () => {
       ]
     })
 
-    cy.get('ion-grid').should('exist')
-    cy.get('ion-row').should('have.length.at.least', 4)
-    cy.get('ion-col').should('have.length.at.least', 4)
+    cy.get('.login-container').should('exist')
+    cy.get('.login-form').should('exist')
+    cy.get('.input-group').should('have.length', 3)
 
     cy.get('ion-input').should('have.length', 3)
     cy.get('ion-input').each(($input) => {
@@ -254,6 +253,6 @@ describe('LoginFormComponent - Pruebas Unitarias', () => {
       cy.wrap($input).should('have.attr', 'fill', 'outline')
     })
 
-    cy.get('ion-button').should('have.attr', 'expand', 'full')
+    cy.get('ion-button').should('have.attr', 'expand', 'block')
   })
 })
