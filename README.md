@@ -106,7 +106,7 @@ src/
 ### Instalación
 ```bash
 # Clonar el repositorio
-git clone [url-del-repositorio]
+git clone [https://github.com/isisdagDuoc/MovieIonic]
 cd movieIonic
 
 # Instalar dependencias
