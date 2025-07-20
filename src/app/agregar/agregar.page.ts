@@ -30,16 +30,11 @@ export class AgregarPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    console.log('🔄 AgregarPage - Inicializando...');
     await this.ds.init();
 
     if (this.ds.isReady()) {
-      console.log('✅ DataService está listo');
       this.availableMovies = await this.ds.obtenerPeliculasCatalogo();
-      console.log('📚 Películas cargadas en AgregarPage:', this.availableMovies?.length || 0);
-      console.log('🎬 Primeras 3 películas:', this.availableMovies?.slice(0, 3));
     } else {
-      console.error('❌ DB o Storage no está listo.');
       this.mensaje = 'Error: No se pudieron cargar las películas.';
     }
   }
@@ -49,21 +44,11 @@ export class AgregarPage implements OnInit {
   }
 
   async obtenerPeliculas() {
-    console.log('🔄 Refrescando películas...');
     if (this.ds.isReady()) {
       this.availableMovies = await this.ds.obtenerPeliculasCatalogo();
-      console.log('📚 Películas recargadas:', this.availableMovies?.length || 0);
     } else {
-      console.error('❌ DB o Storage no está listo para refrescar.');
       this.mensaje = 'Error: No se pudieron recargar las películas.';
     }
-  }
-
-  // Método para debugging
-  async forceReloadMovies() {
-    console.log('🔧 Forzando recarga de películas...');
-    await this.ds.limpiarCatalogoPeliculas();
-    await this.obtenerPeliculas();
   }
 
   async doRegistro() {
@@ -136,7 +121,6 @@ export class AgregarPage implements OnInit {
         peliculas: movies.map((p) => p.title),
       },
     };
-    console.log('se registro?', JSON.stringify(usuarioCreado));
 
     this.router.navigate(['/login'], navExtras);
   }

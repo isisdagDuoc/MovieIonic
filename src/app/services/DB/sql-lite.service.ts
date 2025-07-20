@@ -23,12 +23,11 @@ export class SQLiteService {
     this.platform.ready().then(() => {
       this.sqlite
         .create({
-          name: 'movieonic_v2.db', // Cambiar nombre para forzar nueva DB
+          name: 'movieonic_v2.db',
           location: 'default',
         })
         .then((db: SQLiteObject) => {
           this.database = db;
-          console.log('BD Creada con nuevo nombre');
           this.crearTabla();
           this.dbLista.next(true);
         })
