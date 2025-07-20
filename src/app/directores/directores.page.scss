@@ -1,0 +1,251 @@
+// Estilos unificados para consistencia visual
+.unified-header {
+  ion-toolbar {
+    --background: linear-gradient(135deg, #7b2cbf 0%, #9d4edd 50%, #c77dff 100%);
+    --color: white;
+    --border-color: transparent;
+    box-shadow: 0 4px 20px rgba(123, 44, 191, 0.3);
+  }
+}
+
+.unified-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 1.3rem;
+  
+  .title-icon {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+.unified-back-button {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  
+  ion-icon {
+    font-size: 1.5rem;
+  }
+}
+
+.unified-content {
+  --background: #f9f6ff;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.page-container {
+  padding: 1.5rem;
+  min-height: 100%;
+}
+
+.unified-card {
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(123, 44, 191, 0.1);
+  border: 1px solid rgba(123, 44, 191, 0.1);
+  margin: 1rem 0;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(123, 44, 191, 0.15);
+  }
+}
+
+.directors-list {
+  padding: 0;
+}
+
+.director-card {
+  .director-item {
+    --padding-start: 0;
+    --padding-end: 0;
+    --inner-padding-end: 0;
+  }
+  
+  .director-avatar {
+    width: 60px;
+    height: 60px;
+    margin-right: 16px;
+    
+    img {
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+  
+  .director-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #7b2cbf;
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+  }
+  
+  .director-info {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+    opacity: 0.8;
+  }
+}
+
+.movies-card {
+  .movies-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #7b2cbf;
+    margin: 0;
+    
+    .movies-icon {
+      font-size: 1.3rem;
+      color: #9d4edd;
+    }
+  }
+  
+  .movies-list {
+    padding: 0;
+  }
+  
+  .movie-item {
+    --padding-start: 0;
+    --padding-end: 0;
+    --inner-padding-end: 0;
+    margin: 8px 0;
+    
+    .movie-thumbnail {
+      width: 50px;
+      height: 75px;
+      margin-right: 12px;
+      
+      .movie-img {
+        border-radius: 8px;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
+    }
+    
+    .pelicula-titulo {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #333;
+      margin: 0 0 4px 0;
+      line-height: 1.2;
+    }
+    
+    .pelicula-year {
+      font-size: 0.85rem;
+      color: #666;
+      margin: 0;
+      opacity: 0.7;
+    }
+  }
+}
+
+// Estilos legacy mantenidos para compatibilidad
+.right {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 20px;
+  
+  .back-button {
+    --border-radius: 50%;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    
+    ion-icon {
+      font-size: 24px;
+    }
+    
+    &:hover {
+      --background: rgba(190, 138, 255, 0.1);
+    }
+  }
+}
+
+.director-card {
+  background-color: var(--ion-background-color);
+  margin: 16px 0;
+  box-shadow: 0 4px 12px rgba(190, 138, 255, 0.1);
+  border-radius: 12px;
+  
+  ion-card-header {
+    padding: 16px;
+  }
+  
+  .director-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--ion-color-primary);
+    margin: 0;
+    line-height: 1.2;
+  }
+  
+  .director-info {
+    font-size: 1rem;
+    color: var(--ion-text-color);
+    opacity: 0.8;
+    margin: 8px 0 0 0;
+  }
+}
+
+.movies-card {
+  background-color: var(--ion-background-color);
+  margin: 0 0 24px 0;
+  border-radius: 12px;
+  
+  .movies-header {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--ion-color-primary);
+    margin: 0;
+  }
+  
+  .movie-item {
+    margin: 8px 0;
+    --padding-start: 0;
+    
+    .pelicula-titulo {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--ion-text-color);
+      margin: 0;
+    }
+    
+    .pelicula-year {
+      font-size: 0.9rem;
+      color: var(--ion-text-color);
+      opacity: 0.7;
+      margin: 4px 0 0 0;
+    }
+  }
+}
+
+.movie-img {
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .director-name {
+    font-size: 1.6rem !important;
+  }
+  
+  .movies-header {
+    font-size: 1.2rem !important;
+  }
+  
+  .pelicula-titulo {
+    font-size: 1rem !important;
+  }
+}

@@ -112,8 +112,17 @@ export class DataService {
   }
 
   async obtenerPeliculasCatalogo(): Promise<PeliculaCatalogo[]> {
-    return this.isNative
-      ? this.db.obtenerPeliculasCatalogo()
-      : this.storage.getPeliculasCatalogo();
+    const catalogo = this.isNative
+      ? await this.db.obtenerPeliculasCatalogo()
+      : await this.storage.getPeliculasCatalogo();
+        
+    return catalogo;
+  }
+
+  async limpiarCatalogoPeliculas(): Promise<void> {
+    if (this.isNative) {
+    } else {
+      await this.storage.remove('peliculas_catalogo');
+    }
   }
 }

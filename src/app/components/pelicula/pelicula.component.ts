@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService } from 'src/app/services/dataservice.service';
 import { PeliculaCatalogo } from '../../services/DB/models/pelicula-catalogo';
+import { AnimationController, Animation } from '@ionic/angular';
 
 @Component({
   selector: 'app-pelicula',
@@ -9,7 +10,7 @@ import { PeliculaCatalogo } from '../../services/DB/models/pelicula-catalogo';
   styleUrls: ['./pelicula.component.scss'],
   standalone: false,
 })
-export class PeliculaComponent implements OnInit {
+export class PeliculaComponent implements OnInit, AfterViewInit {
   @Input() set pelicula(value: PeliculaCatalogo | null) {
     if (value) {
       this.movieInfo = value;
@@ -21,10 +22,13 @@ export class PeliculaComponent implements OnInit {
 
   @Input() state: any;
 
+  @ViewChild('cardanimacion', { read: ElementRef }) cardElement!: ElementRef<HTMLElement>;
+
   movieInfo: PeliculaCatalogo | null = null;
   private peliculaRecibidaDirecta = false;
+  private cardAnimation!: Animation | null;
 
-  constructor(private router: Router, private ds: DataService) {}
+  constructor(private router: Router, private ds: DataService, private animationCtrl: AnimationController) {}
 
   async ngOnInit() {
     await this.ds.init();
@@ -43,8 +47,25 @@ export class PeliculaComponent implements OnInit {
     }
   }
 
-  irADetallePelicula() {
+  ngAfterViewInit() {
+    this.cardAnimation = this.cardElement
+      ? this.animationCtrl
+          .create()
+          .addElement(this.cardElement.nativeElement)
+          .fill('none')
+          .duration(1000)
+          .keyframes([
+            { offset: 0, transform: 'scale(1)', opacity: '1' },
+            { offset: 0.3, transform: 'scale(1.07)', opacity: '0.3' },
+            { offset: 0.3, transform: 'scale(1)', opacity: '1' },
+          ])
+      : null;
+  }
+
+  async irADetallePelicula() {
     if (!this.movieInfo) return;
+
+    await this.playCardAnimation();
 
     this.router.navigate(['/peliculas/' + this.movieInfo.id], {
       state: {
@@ -52,6 +73,22 @@ export class PeliculaComponent implements OnInit {
         pelicula: this.movieInfo,
       },
     });
+  }
+
+  async playCardAnimation() {
+    await this.cardAnimation?.play();
+  }
+
+  pauseCardAnimation() {
+    this.cardAnimation?.pause();
+  }
+
+  async stopCardAnimation() {
+    await this.cardAnimation?.stop();
+  }
+
+  async animateCard() {
+    await this.playCardAnimation();
   }
 
   getImageSrc(path: string | undefined) {

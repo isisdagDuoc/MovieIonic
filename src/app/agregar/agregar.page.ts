@@ -82,6 +82,7 @@ export class AgregarPage implements OnInit {
       genre: p.genre,
       image: p.image,
       directorId: p.director?.id || 0,
+      description: p.description || '',
     }));
 
     const nuevoUsuario: Usuario = {

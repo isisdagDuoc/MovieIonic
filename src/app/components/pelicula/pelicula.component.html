@@ -7,10 +7,17 @@
   </mat-card-header>
   <mat-card-content>
     {{ movieInfo?.year }}
-    <p class="right">
-      <a (click)="irADetallePelicula()">
-       ver más
-      </a>
-    </p> 
+    <div class="right">
+      <ion-button 
+        fill="outline" 
+        color="primary" 
+        size="small"
+        shape="round"
+        (click)="irADetallePelicula()"
+        class="ver-mas-button">
+        <ion-icon name="eye-outline" slot="start"></ion-icon>
+        Ver más
+      </ion-button>
+    </div> 
   </mat-card-content>
 </mat-card>

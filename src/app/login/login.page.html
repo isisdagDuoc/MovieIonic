@@ -1,15 +1,28 @@
-<ion-content [fullscreen]="true">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title size="large">Movieonic</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="login-page-content">
+  <div class="login-page-container">
+    <cs-login-form></cs-login-form>
 
-  <cs-login-form></cs-login-form>
+    <div class="register-link-container">
+      <div class="register-link">
+        <ion-icon name="person-add-outline" color="primary"></ion-icon>
+        <span>¿No tienes cuenta?</span>
+        <ion-button 
+          fill="clear" 
+          color="primary" 
+          size="small"
+          (click)="irARegistro()"
+          class="register-button">
+          Regístrate aquí
+        </ion-button>
+      </div>
+    </div>
 
-  <div class="btn-navigate">
-    <a (click)="irARegistro()"> ¿No tienes cuenta? Regístrate </a>
+    <div class="debug-info" *ngIf="texto">
+      <ion-chip color="primary" outline="true">
+        <ion-icon name="server-outline"></ion-icon>
+        <ion-label>BD: {{ texto }}</ion-label>
+      </ion-chip>
+    </div>
   </div>
-  <p style="font-weight: bolder; color: blue">Texto BD: {{ texto }}</p>
 </ion-content>
  

@@ -10,4 +10,5 @@ export class Pelicula {
   image: string = "";
   director!: Director;
   user!: Usuario;
+  description: string = "";
 }

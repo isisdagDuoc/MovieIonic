@@ -11,7 +11,7 @@ import { DataService } from '../services/dataservice.service';
 })
 export class PeliculasPage implements OnInit {
   peliculas: PeliculaCatalogo[] = [];
-  pelicula: any = {};
+  pelicula: PeliculaCatalogo | null = null;
   state: any;
   id: any;
   peliculasDirector: PeliculaCatalogo[] = [];
@@ -21,19 +21,32 @@ export class PeliculasPage implements OnInit {
     private route: ActivatedRoute,
     private ds: DataService
   ) {
-    if (!this.router.getCurrentNavigation()?.extras.state)
+    const navigation = this.router.getCurrentNavigation();
+    if (!navigation?.extras.state) {
       this.router.navigate(['/login']);
-    else this.state = this.router.getCurrentNavigation()?.extras.state;
+      return;
+    }
+    
+    this.state = navigation.extras.state;
     this.id = this.route.snapshot.paramMap.get('id');
+    
+    console.log('Constructor - ID de película:', this.id);
+    console.log('Constructor - State recibido:', this.state);
 
-    this.id = this.route.snapshot.paramMap.get('id');
-
+    // Si la película viene en el state, usar solo como referencia para obtener el ID
     if (this.state?.pelicula) {
-      this.pelicula = this.state.pelicula;
+      console.log('Constructor - Película encontrada en state:', this.state.pelicula);
+      // Asegurar que tenemos el ID correcto
+      if (!this.id) {
+        this.id = this.state.pelicula.id;
+      }
     }
   }
 
   async ngOnInit() {
+    console.log('ngOnInit - Iniciando...');
+    console.log('ngOnInit - Estado actual de película:', this.pelicula);
+    console.log('ngOnInit - ID:', this.id);
 
     await this.ds.init();
     if (this.state && this.state.userId) {
@@ -52,13 +65,37 @@ export class PeliculasPage implements OnInit {
 
   async getPeliculas() {
     await this.ds.init();
-    if (this.state && this.state.userId) {
-      this.peliculas = await this.ds.obtenerPeliculasDeUsuario(this.state.userId);
-      this.pelicula = this.peliculas.find(
+    
+    // Eliminar esta verificación para SIEMPRE obtener la película completa del catálogo
+    // if (this.pelicula && this.pelicula.id) {
+    //   console.log('Película ya disponible desde state:', this.pelicula);
+    //   return;
+    // }
+    
+    if (!this.id) {
+      console.error('No hay ID de película para buscar');
+      return;
+    }
+    
+    console.log('Obteniendo película COMPLETA con ID:', this.id);
+    
+    await this.ds.limpiarCatalogoPeliculas();
+    
+    try {
+      const catalogo = await this.ds.obtenerPeliculasCatalogo();
+      console.log('Catálogo obtenido:', catalogo);
+      
+      if (catalogo && catalogo.length > 0) {
+        console.log('Primera película del catálogo:', catalogo[0]);
+        console.log('¿Primera película tiene description?', catalogo[0] && 'description' in catalogo[0]);
+      } 
+      
+      this.pelicula = catalogo.find(
         (p) => String(p.id) === String(this.id)
-      );
-    } else {
-      console.warn('[getPeliculas] No hay userId en state');
+      ) || null;
+      
+    } catch (error) {
+      console.error('Error al obtener catálogo de películas:', error);
     }
   }
 

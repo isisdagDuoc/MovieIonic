@@ -141,6 +141,7 @@ export class StorageService {
         genre: 'Ciencia Ficción',
         image: 'inception.jpg',
         directorId: 1,
+        description: 'Inception es una película de ciencia ficción dirigida por Christopher Nolan, que sigue a un ladrón de sueños que debe realizar un último trabajo para borrar su pasado.'
       },
       {
         id: 2,
@@ -150,6 +151,7 @@ export class StorageService {
         genre: 'Ciencia Ficción',
         image: 'matrix.jpg',
         directorId: 2,
+        description: 'The Matrix es una película de ciencia ficción dirigida por las hermanas Wachowski, que explora un mundo virtual controlado por máquinas y la lucha de los humanos por liberarse.'
       },
       {
         id: 3,
@@ -159,6 +161,7 @@ export class StorageService {
         genre: 'Ciencia Ficción',
         image: 'interstellar.jpg',
         directorId: 1,
+        description: 'Interstellar es una película de ciencia ficción dirigida por Christopher Nolan, que narra la historia de un grupo de astronautas que viajan a través de un agujero de gusano en busca de un nuevo hogar para la humanidad.'
       },
       {
         id: 4,
@@ -168,6 +171,7 @@ export class StorageService {
         genre: 'Romance',
         image: 'orgullo.jpg',
         directorId: 5,
+        description: 'Orgullo y Prejuicio es una adaptación cinematográfica de la novela clásica de Jane Austen, que narra la historia de Elizabeth Bennet y su relación con el orgulloso Mr. Darcy.'
       },
       {
         id: 5,
@@ -177,6 +181,7 @@ export class StorageService {
         genre: 'Aventura',
         image: 'jurassic.jpg',
         directorId: 4,
+        description: 'Jurassic Park es una película de ciencia ficción dirigida por Steven Spielberg, basada en la novela de Michael Crichton, que narra la historia de un parque temático con dinosaurios clonados.'
       },
       {
         id: 6,
@@ -186,6 +191,7 @@ export class StorageService {
         genre: 'Crimen',
         image: 'goodfellas.jpg',
         directorId: 5,
+        description: 'Goodfellas es una película de crimen dirigida por Martin Scorsese, que narra la vida de un joven que se convierte en miembro de la mafia.'
       },
       {
         id: 7,
@@ -195,6 +201,7 @@ export class StorageService {
         genre: 'Crimen',
         image: 'pulp.jpg',
         directorId: 6,
+        description: 'Pulp Fiction es una película de culto dirigida por Quentin Tarantino, que entrelaza varias historias de crimen en Los Ángeles.'
       },
       {
         id: 8,
@@ -204,6 +211,7 @@ export class StorageService {
         genre: 'Comedia',
         image: 'wolf.jpg',
         directorId: 5,
+        description: 'The Wolf of Wall Street es una película basada en la vida de Jordan Belfort, un corredor de bolsa que se convirtió en millonario a través de prácticas fraudulentas y excesos desenfrenados.'
       },
       {
         id: 9,
@@ -213,6 +221,7 @@ export class StorageService {
         genre: 'Drama',
         image: 'shawshank.jpg',
         directorId: 5,
+        description: 'The Shawshank Redemption es una película épica que narra la historia de Andy Dufresne, un banquero condenado a cadena perpetua en la prisión de Shawshank, y su amistad con el preso Red.'
       },
       {
         id: 10,
@@ -222,6 +231,7 @@ export class StorageService {
         genre: 'Crimen',
         image: 'godfather.jpg',
         directorId: 5,
+        description: 'The Godfather es una película épica que narra la historia de la familia mafiosa Corleone, centrada en el patriarca Vito Corleone y su hijo Michael.'
       },
       {
         id: 11,
@@ -231,6 +241,7 @@ export class StorageService {
         genre: 'Drama',
         image: 'schindler.jpg',
         directorId: 4,
+        description: 'Schindlers List es una película conmovedora que narra la historia de Oskar Schindler, un empresario alemán que salvó a más de mil judíos durante el Holocausto.'
       },
       {
         id: 12,
@@ -240,6 +251,7 @@ export class StorageService {
         genre: 'Acción',
         image: 'dark-knight.jpg',
         directorId: 1,
+        description: 'The Dark Knight es una película de superhéroes dirigida por Christopher Nolan, que sigue al Caballero Oscuro mientras enfrenta al Joker en una batalla épica por Gotham City.'
       },
       {
         id: 13,
@@ -249,6 +261,7 @@ export class StorageService {
         genre: 'Drama',
         image: 'forrest-gump.jpg',
         directorId: 5,
+        description: 'Forrest Gump es una película conmovedora que narra la vida de un hombre con discapacidad intelectual que, a pesar de sus limitaciones, vive una vida extraordinaria y se convierte en testigo de eventos históricos importantes.'
       },
     ];
 
@@ -256,6 +269,25 @@ export class StorageService {
   }
 
   async getPeliculasCatalogo(): Promise<PeliculaCatalogo[]> {
-    return (await this.get('peliculas_catalogo')) || [];
+    let catalogo = await this.get('peliculas_catalogo') || [];
+    
+    // Si no hay catálogo o está vacío, inicializar
+    if (!catalogo || catalogo.length === 0) {
+      console.log('📚 Inicializando catálogo de películas...');
+      await this.initCatalogoPeliculas();
+      catalogo = await this.get('peliculas_catalogo') || [];
+    }
+    
+    // Verificar si el catálogo tiene descripciones
+    if (catalogo.length > 0 && catalogo[0] && !catalogo[0].description) {
+      console.warn('⚠️ Catálogo sin descripciones detectado, reinicializando...');
+      await this.remove('peliculas_catalogo');
+      await this.initCatalogoPeliculas();
+      catalogo = await this.get('peliculas_catalogo') || [];
+    }
+    
+    console.log('✅ StorageService - Catálogo final:', catalogo.length, 'películas');
+    
+    return catalogo;
   }
 }

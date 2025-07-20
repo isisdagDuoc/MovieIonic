@@ -1,29 +1,90 @@
-<ion-header [translucent]="true">
+<ion-header class="unified-header">
   <ion-toolbar>
-    <ion-title>Catálogo de Películas</ion-title>
+    <ion-title class="unified-title">
+      <ion-icon name="film-outline" class="title-icon"></ion-icon>
+      Catálogo de Películas
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-button
+        fill="clear"
+        color="light"
+        (click)="volverAlHome()"
+        class="unified-back-button"
+      >
+        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <ion-card>
-    <img
-      [src]="getImageSrc(pelicula.image)"
-      alt="{{ pelicula.title }}"
-      class="movie-img"
-    />
-    <ion-card-header>
-      <ion-card-title>{{ pelicula.title }}</ion-card-title>
-      <ion-card-subtitle>Año: {{ pelicula.year }}</ion-card-subtitle>
-    </ion-card-header>
+<ion-content class="unified-content">
+  <div class="page-container">
 
-    <ion-card-content>
-      <p>Género: {{ pelicula.genre }}</p>
-      <p>Puntaje: {{ pelicula.rating }}</p>
-    </ion-card-content>
-  </ion-card>
-  <div class="right">
-    <a (click)="volverAlHome()">
-      <ion-icon name="arrow-back-outline" size="large"></ion-icon>
-    </a>
+    <div class="movie-section" *ngIf="pelicula; else noPelicula">
+      <ion-card class="movie-card unified-card">
+        <div class="movie-image-container">
+          <img
+            [src]="getImageSrc(pelicula.image)"
+            alt="{{ pelicula.title }}"
+            class="movie-img"
+          />
+          <div class="movie-rating-badge">
+            <ion-icon name="star" class="rating-icon"></ion-icon>
+            <span class="rating-text">{{ pelicula.rating }}/10</span>
+          </div>
+        </div>
+        
+        <ion-card-header class="movie-header">
+          <ion-card-title class="movie-title">{{ pelicula.title }}</ion-card-title>
+          <ion-card-subtitle class="movie-subtitle">
+            <ion-icon name="calendar-outline" class="info-icon"></ion-icon>
+            {{ pelicula.year }} • 
+            <ion-icon name="pricetag-outline" class="info-icon"></ion-icon>
+            {{ pelicula.genre }}
+          </ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content class="movie-content">
+          <div class="description-section" *ngIf="pelicula.description">
+            <h4 class="description-title">
+              <ion-icon name="document-text-outline" class="description-icon"></ion-icon>
+              Sinopsis
+            </h4>
+            <p class="description-text">{{ pelicula.description }}</p>
+          </div>
+
+          <div class="no-description" *ngIf="!pelicula.description">
+            <div class="no-description-content">
+              <ion-icon name="information-circle-outline" class="no-desc-icon"></ion-icon>
+              <p class="no-desc-text">No hay descripción disponible para esta película.</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <ng-template #noPelicula>
+      <div class="loading-section">
+        <ion-card class="loading-card unified-card">
+          <ion-card-content>
+            <div class="loading-content">
+              <div class="loading-animation">
+                <ion-icon name="film-outline" class="loading-icon"></ion-icon>
+              </div>
+              <h3 class="loading-title">Cargando película...</h3>
+              <p class="loading-text">Por favor espera mientras se carga la información.</p>
+              <ion-button 
+                fill="outline" 
+                color="primary" 
+                (click)="volverAlHome()"
+                class="loading-button">
+                <ion-icon name="home-outline" slot="start"></ion-icon>
+                Volver al inicio
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ng-template>
   </div>
 </ion-content>

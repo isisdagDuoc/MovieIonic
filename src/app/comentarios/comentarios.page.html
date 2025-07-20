@@ -1,34 +1,72 @@
-<ion-header>
+<ion-header class="unified-header">
   <ion-toolbar>
-    <ion-title>Comentarios</ion-title>
+    <ion-title class="unified-title">
+      <ion-icon name="chatbubbles-outline" class="title-icon"></ion-icon>
+      Comentarios
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-button
+        fill="clear"
+        color="light"
+        (click)="irAHome()"
+        class="unified-back-button"
+      >
+        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" [fullscreen]="true">
-  <div class="right btn-navigate">
-    <a (click)="irAHome()"> Volver al Home </a>
-  </div>
+<ion-content class="unified-content">
+  <div class="page-container">
 
-  <ion-list>
-    <ion-item *ngFor="let comentario of comentariosPaginados">
-      <ion-avatar slot="start">
-        <img src="../../assets/images/avatar1.png" alt="avatar" />
-      </ion-avatar>
-      <ion-label>
-        <h2><strong>{{ comentario.name }}</strong></h2>
-        <p>{{ comentario.text }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+    <div class="comments-section">
+      <div class="section-header">
+        <h2 class="section-title">Comunidad de MovieIonic</h2>
+        <p class="section-subtitle">Descubre las opiniones de otros cinéfilos</p>
+      </div>
 
-  <div class="ion-text-center">
-    <ion-button (click)="prevPage()" [disabled]="currentPage === 1"
-      >Anterior</ion-button
-    >
-    <ion-button
-      (click)="nextPage()"
-      [disabled]="(currentPage * itemsPerPage) >= allComentarios.length"
-      >Siguiente</ion-button
-    >
+      <ion-list class="comments-list">
+        <ion-card *ngFor="let comentario of comentariosPaginados" class="comment-card unified-card">
+          <ion-card-content>
+            <ion-item lines="none" class="comment-item">
+              <ion-avatar slot="start" class="comment-avatar">
+                <img src="../../assets/images/avatar1.png" alt="avatar" />
+              </ion-avatar>
+              <ion-label>
+                <h3 class="comment-author">{{ comentario.name }}</h3>
+                <p class="comment-text">{{ comentario.text }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+
+      <div class="pagination-controls">
+        <ion-button 
+          fill="outline" 
+          color="primary" 
+          (click)="prevPage()" 
+          [disabled]="currentPage === 1"
+          class="pagination-button">
+          <ion-icon name="chevron-back-outline" slot="start"></ion-icon>
+          Anterior
+        </ion-button>
+        
+        <div class="page-info">
+          <span class="page-text">Página {{ currentPage }}</span>
+        </div>
+        
+        <ion-button
+          fill="outline" 
+          color="primary" 
+          (click)="nextPage()"
+          [disabled]="(currentPage * itemsPerPage) >= allComentarios.length"
+          class="pagination-button">
+          Siguiente
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
   </div>
 </ion-content>

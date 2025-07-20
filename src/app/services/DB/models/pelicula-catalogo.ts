@@ -6,4 +6,5 @@ export interface PeliculaCatalogo {
   genre: string;
   image: string;
   directorId: number;
+  description: string;
 }

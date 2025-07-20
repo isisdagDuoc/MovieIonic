@@ -64,26 +64,27 @@ export class SQLiteService {
             rating REAL,
             genre TEXT,
             image TEXT,
-            directorId INTEGER
+            directorId INTEGER,
+            description TEXT
           );`,
           []
         );
 
         await this.database.executeSql(
-          `INSERT OR IGNORE INTO pelicula_catalogo (id, title, year, rating, genre, image, directorId) VALUES
-            (1, 'Inception', 2010, 8.8, 'Ciencia Ficción', 'inception.jpg', 1),
-            (2, 'The Matrix', 1999, 8.7, 'Ciencia Ficción', 'matrix.jpg', 2),
-            (3, 'Interstellar', 2014, 8.6, 'Ciencia Ficción', 'interstellar.jpg', 1),
-            (4, 'Orgullo y Prejuicio', 2005, 8.6, 'Romance', 'orgullo.jpg', 5),
-            (5, 'Jurassic Park', 1993, 8.1, 'Aventura', 'jurassic.jpg', 4),
-            (6, 'Goodfellas', 1990, 8.7, 'Crimen', 'goodfellas.jpg', 5),
-            (7, 'Pulp Fiction', 1994, 8.9, 'Crimen', 'pulp.jpg', 6),
-            (8, 'The Wolf of Wall Street', 2013, 8.2, 'Comedia', 'wolf.jpg', 5),
-            (9, 'The Shawshank Redemption', 1994, 9.3, 'Drama', 'shawshank.jpg', 5),
-            (10, 'The Godfather', 1972, 9.2, 'Crimen', 'godfather.jpg', 5),
-            (11, 'Schindlers List', 1993, 9.0, 'Drama', 'schindler.jpg', 4),
-            (12, 'The Dark Knight', 2008, 9.0, 'Acción', 'dark-knight.jpg', 1),
-            (13, 'Forrest Gump', 1994, 8.8, 'Drama', 'forrest-gump.jpg', 5)
+          `INSERT OR IGNORE INTO pelicula_catalogo (id, title, year, rating, genre, image, directorId, description) VALUES
+            (1, 'Inception', 2010, 8.8, 'Ciencia Ficción', 'inception.jpg', 1, 'Inception es una película de ciencia ficción dirigida por Christopher Nolan, que sigue a un ladrón de sueños que debe realizar un último trabajo para borrar su pasado.'),
+            (2, 'The Matrix', 1999, 8.7, 'Ciencia Ficción', 'matrix.jpg', 2, 'The Matrix es una película de ciencia ficción dirigida por las hermanas Wachowski, que explora un mundo virtual controlado por máquinas y la lucha de los humanos por liberarse.'),
+            (3, 'Interstellar', 2014, 8.6, 'Ciencia Ficción', 'interstellar.jpg', 1, 'Interstellar es una película de ciencia ficción dirigida por Christopher Nolan, que narra la historia de un grupo de astronautas que viajan a través de un agujero de gusano en busca de un nuevo hogar para la humanidad.'),
+            (4, 'Orgullo y Prejuicio', 2005, 8.6, 'Romance', 'orgullo.jpg', 5, 'Orgullo y Prejuicio es una adaptación cinematográfica de la novela clásica de Jane Austen, que narra la historia de Elizabeth Bennet y su relación con el orgulloso Mr. Darcy.'),
+            (5, 'Jurassic Park', 1993, 8.1, 'Aventura', 'jurassic.jpg', 4, 'Jurassic Park es una película de ciencia ficción dirigida por Steven Spielberg, basada en la novela de Michael Crichton, que narra la historia de un parque temático con dinosaurios clonados.'),
+            (6, 'Goodfellas', 1990, 8.7, 'Crimen', 'goodfellas.jpg', 5, 'Goodfellas es una película de crimen dirigida por Martin Scorsese, que narra la vida de un joven que se convierte en miembro de la mafia.'),
+            (7, 'Pulp Fiction', 1994, 8.9, 'Crimen', 'pulp.jpg', 6, 'Pulp Fiction es una película de culto dirigida por Quentin Tarantino, que entrelaza varias historias de crimen en Los Ángeles.'),
+            (8, 'The Wolf of Wall Street', 2013, 8.2, 'Comedia', 'wolf.jpg', 5, 'The Wolf of Wall Street es una película basada en la vida de Jordan Belfort, un corredor de bolsa que se convirtió en millonario a través de prácticas fraudulentas y excesos desenfrenados.'),
+            (9, 'The Shawshank Redemption', 1994, 9.3, 'Drama', 'shawshank.jpg', 5, 'The Shawshank Redemption es una película épica que narra la historia de Andy Dufresne, un banquero condenado a cadena perpetua en la prisión de Shawshank, y su amistad con el preso Red.'),
+            (10, 'The Godfather', 1972, 9.2, 'Crimen', 'godfather.jpg', 5, 'The Godfather es una película épica que narra la historia de la familia mafiosa Corleone, centrada en el patriarca Vito Corleone y su hijo Michael.'),
+            (11, 'Schindlers List', 1993, 9.0, 'Drama', 'schindler.jpg', 4, 'Schindlers List es una película conmovedora que narra la historia de Oskar Schindler, un empresario alemán que salvó a más de mil judíos durante el Holocausto.'),
+            (12, 'The Dark Knight', 2008, 9.0, 'Acción', 'dark-knight.jpg', 1, 'The Dark Knight es una película de superhéroes dirigida por Christopher Nolan, que sigue al Caballero Oscuro mientras enfrenta al Joker en una batalla épica por Gotham City.'),
+            (13, 'Forrest Gump', 1994, 8.8, 'Drama', 'forrest-gump.jpg', 5, 'Forrest Gump es una película conmovedora que narra la vida de un hombre con discapacidad intelectual que, a pesar de sus limitaciones, vive una vida extraordinaria y se convierte en testigo de eventos históricos importantes.')
           ;`,
           []
         );
