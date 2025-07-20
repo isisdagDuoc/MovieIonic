@@ -23,12 +23,12 @@ export class SQLiteService {
     this.platform.ready().then(() => {
       this.sqlite
         .create({
-          name: 'movieonic.db',
+          name: 'movieonic_v2.db', // Cambiar nombre para forzar nueva DB
           location: 'default',
         })
         .then((db: SQLiteObject) => {
           this.database = db;
-          console.log('BD Creada');
+          console.log('BD Creada con nuevo nombre');
           this.crearTabla();
           this.dbLista.next(true);
         })
@@ -47,13 +47,10 @@ export class SQLiteService {
     if (this.database != null) {
       try {
       
-        /*
-        await this.database.executeSql('DELETE FROM pelicula;', []);
-        await this.database.executeSql('DELETE FROM pelicula_catalogo;', []);
-        await this.database.executeSql('DELETE FROM usuario;', []);
-        await this.database.executeSql('DELETE FROM director;', []);
-        await this.database.executeSql('DELETE FROM comentario;', []);
-        */
+        // Eliminar tablas existentes para recrearlas con la estructura correcta
+        await this.database.executeSql('DROP TABLE IF EXISTS pelicula;', []);
+        await this.database.executeSql('DROP TABLE IF EXISTS pelicula_catalogo;', []);
+        await this.database.executeSql('DROP TABLE IF EXISTS comentario;', []);
 
         // ──────────────── CATALOGO DE PELICULAS ─────────────────
         await this.database.executeSql(
@@ -186,11 +183,13 @@ export class SQLiteService {
 
   async obtenerTexto() {
     if (this.database != null) {
-      let res = await this.database.executeSql(`SELECT * FROM datos;`, []);
-
-      if (res.rows.length > 0) return res.rows.item(0).texto;
+      try {
+        let res = await this.database.executeSql(`SELECT * FROM pelicula_catalogo LIMIT 1;`, []);
+        if (res.rows.length > 0) return `Películas cargadas: ${res.rows.length}`;
+      } catch (error) {
+        console.error('Error al obtener datos:', error);
+      }
     }
-
     return 'No hay datos';
   }
 

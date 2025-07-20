@@ -96,6 +96,24 @@
         </ion-item>
       </div>
 
+      <!-- Debug info -->
+      <div class="debug-info" style="margin: 1rem 0; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px;">
+        <p style="color: white; font-size: 0.8rem; margin: 0;">
+          Debug: {{ availableMovies.length || 0 }} películas disponibles
+        </p>
+        <p *ngIf="availableMovies.length === 0" style="color: orange; font-size: 0.8rem; margin: 0;">
+          ⚠️ No se encontraron películas
+        </p>
+        <ion-button 
+          size="small" 
+          fill="clear" 
+          color="light" 
+          (click)="forceReloadMovies()"
+          style="margin-top: 0.5rem;">
+          🔄 Recargar películas
+        </ion-button>
+      </div>
+
       <div class="register-button-container">
         <ion-button 
           expand="block" 

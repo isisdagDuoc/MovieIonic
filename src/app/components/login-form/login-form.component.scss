@@ -128,17 +128,22 @@
   margin-bottom: 1.2rem;
   
   .custom-input {
-    --background: rgba(255, 255, 255, 0.9);
-    --border-radius: 12px;
-    --border-color: rgba(190, 138, 255, 0.2);
-    --color: var(--ion-text-color);
-    --highlight-color: var(--ion-color-primary);
-    --placeholder-color: #999;
+    --background: rgba(255, 255, 255, 0.9) !important;
+    --border-radius: 12px !important;
+    --border-color: transparent !important;
+    --color: var(--ion-text-color) !important;
+    --highlight-color: var(--ion-color-primary) !important;
+    --placeholder-color: #999 !important;
+    --border-width: 0 !important;
+    --inner-border-width: 0 !important;
+    --highlight-height: 0 !important;
+    --inner-border-color: transparent !important;
     
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(190, 138, 255, 0.1);
-    transition: all 0.3s ease;
-    overflow: hidden;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 20px rgba(190, 138, 255, 0.1) !important;
+    transition: all 0.3s ease !important;
+    overflow: hidden !important;
+    border: none !important;
     
     &:hover {
       --border-color: rgba(190, 138, 255, 0.4);
@@ -157,13 +162,37 @@
     }
     
     ion-input {
-      --padding-start: 0;
-      --padding-end: 12px;
-      font-size: 1rem;
+      --padding-start: 0 !important;
+      --padding-end: 12px !important;
+      --border-width: 0 !important;
+      --highlight-height: 0 !important;
+      font-size: 1rem !important;
+      border: none !important;
       
       input {
-        font-weight: 500;
+        font-weight: 500 !important;
       }
+    }
+    
+    // Eliminar cualquier línea o borde de Ionic
+    &::part(native) {
+      border: none !important;
+      border-bottom: none !important;
+    }
+    
+    .item-inner {
+      border: none !important;
+      border-bottom: none !important;
+    }
+    
+    // Eliminar líneas específicas de ion-item
+    &::after,
+    &::before {
+      display: none !important;
+    }
+    
+    .item-native {
+      border: none !important;
     }
   }
 }

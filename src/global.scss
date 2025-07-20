@@ -52,3 +52,59 @@ body {
   --ion-color-accent-tint: #c89bff;
 }
 
+
+ion-item.custom-input {
+  --border-width: 0 !important;
+  --inner-border-width: 0 !important;
+  --highlight-height: 0 !important;
+  --border-color: transparent !important;
+  --inner-border-color: transparent !important;
+  border: none !important;
+  
+  &::part(native) {
+    border: none !important;
+    border-bottom: none !important;
+  }
+  
+  .item-inner {
+    border: none !important;
+    border-bottom: none !important;
+  }
+  
+  &::after,
+  &::before {
+    display: none !important;
+  }
+}
+
+/* Eliminar líneas específicas de ion-input */
+ion-input {
+  --border-width: 0 !important;
+  --highlight-height: 0 !important;
+  border: none !important;
+  
+  &::part(native) {
+    border: none !important;
+  }
+}
+
+/* Eliminar líneas de todos los ion-item con lines="none" */
+ion-item[lines="none"] {
+  --border-width: 0 !important;
+  --inner-border-width: 0 !important;
+  --highlight-height: 0 !important;
+  --border-color: transparent !important;
+  --inner-border-color: transparent !important;
+  border: none !important;
+  
+  .item-inner {
+    border: none !important;
+    border-bottom: none !important;
+  }
+  
+  &::after,
+  &::before {
+    display: none !important;
+  }
+}
+
